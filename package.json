@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "build": "echo 'No build step required'"  // Replace this with your actual build command if you have one
+    "build": "echo 'No build step required'"
   },
   "dependencies": {
     "express": "^4.17.1"
