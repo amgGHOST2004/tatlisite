@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .validation-message {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+        .validation-message span {
+            margin-left: 5px;
+        }
+        .valid {
+            color: green;
+        }
+        .invalid {
+            color: red;
+        }
+        .warning {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>Shipping Site</h1>
+        <div class="nav-links">
+            <a href="login.html">Login</a>
+            <a href="register.html">Register</a>
+        </div>
+    </div>
+    <div class="container">
+        <h2>Register</h2>
+        <form id="registerForm">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required><br>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <div id="usernameValidation" class="validation-message">
+                <span id="usernameLength" class="invalid">✗</span>
+                <span>At least 5 characters long</span>
+            </div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <div id="passwordValidation" class="validation-message">
+                <span id="passwordLength" class="invalid">✗</span>
+                <span>At least 8 characters long</span>
+            </div>
+            <div class="validation-message">
+                <span id="passwordUppercase" class="invalid">✗</span>
+                <span>At least one uppercase letter</span>
+            </div>
+            <div class="validation-message">
+                <span id="passwordNumber" class="invalid">✗</span>
+                <span>At least one number</span>
+            </div>
+            <div class="validation-message">
+                <span id="passwordSpecial" class="invalid">✗</span>
+                <span>At least one special character</span>
+            </div>
+            <button type="submit">Register</button>
+            <p id="warningMessage" class="warning" style="display: none;">Lütfen kurallara uygun şifre veya kullanıcı adı giriniz.</p>
+            <p id="errorMessage" class="warning" style="display: none;"></p>
+        </form>
+        <p>Already have an account? <a href="login.html">Login here</a>.</p>
+    </div>
+    <script>
+        const emailInput = document.getElementById('email');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const usernameLength = document.getElementById('usernameLength');
+        const passwordLength = document.getElementById('passwordLength');
+        const passwordUppercase = document.getElementById('passwordUppercase');
+        const passwordNumber = document.getElementById('passwordNumber');
+        const passwordSpecial = document.getElementById('passwordSpecial');
+        const warningMessage = document.getElementById('warningMessage');
+        const errorMessage = document.getElementById('errorMessage');
+
+        usernameInput.addEventListener('input', () => {
+            if (usernameInput.value.length >= 5) {
+                usernameLength.classList.remove('invalid');
+                usernameLength.classList.add('valid');
+                usernameLength.textContent = '✓';
+            } else {
+                usernameLength.classList.remove('valid');
+                usernameLength.classList.add('invalid');
+                usernameLength.textContent = '✗';
+            }
+        });
+
+        passwordInput.addEventListener('input', () => {
+            const password = passwordInput.value;
+            const lengthValid = password.length >= 8;
+            const uppercaseValid = /[A-Z]/.test(password);
+            const numberValid = /\d/.test(password);
+            const specialValid = /[@$!%*?&]/.test(password);
+
+            passwordLength.classList.toggle('valid', lengthValid);
+            passwordLength.classList.toggle('invalid', !lengthValid);
+            passwordLength.textContent = lengthValid ? '✓' : '✗';
+
+            passwordUppercase.classList.toggle('valid', uppercaseValid);
+            passwordUppercase.classList.toggle('invalid', !uppercaseValid);
+            passwordUppercase.textContent = uppercaseValid ? '✓' : '✗';
+
+            passwordNumber.classList.toggle('valid', numberValid);
+            passwordNumber.classList.toggle('invalid', !numberValid);
+            passwordNumber.textContent = numberValid ? '✓' : '✗';
+
+            passwordSpecial.classList.toggle('valid', specialValid);
+            passwordSpecial.classList.toggle('invalid', !specialValid);
+            passwordSpecial.textContent = specialValid ? '✓' : '✗';
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const usernameValid = usernameInput.value.length >= 5;
+            const passwordValid = passwordInput.value.length >= 8 && /[A-Z]/.test(passwordInput.value) && /\d/.test(passwordInput.value) && /[@$!%*?&]/.test(passwordInput.value);
+
+            if (!usernameValid || !passwordValid) {
+                warningMessage.style.display = 'block';
+                errorMessage.style.display = 'none';
+            } else {
+                warningMessage.style.display = 'none';
+                try {
+                    const response = await fetch('/api/users/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email: emailInput.value,
+                            username: usernameInput.value,
+                            password: passwordInput.value
+                        })
+                    });
+                    const result = await response.json();
+                    if (!response.ok) {
+                        errorMessage.innerHTML = result.message;
+                        errorMessage.style.display = 'block';
+                    } else {
+                        errorMessage.style.display = 'none';
+                        alert('Registration successful! You can now log in.');
+                        window.location.href = '/login.html';
+                    }
+                } catch (error) {
+                    errorMessage.innerHTML = 'An error occurred. Please try again.';
+                    errorMessage.style.display = 'block';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
