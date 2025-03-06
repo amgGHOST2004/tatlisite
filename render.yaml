@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: tatlisite
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: EMAIL_USER
+        value: tatliemirefe3@gmail.com
+      - key: EMAIL_PASS
+        value: "qjwn mwwi rrwu jolj"
