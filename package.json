@@ -8,8 +8,9 @@
     "build": "echo 'No build step required'"
   },
   "dependencies": {
-    "body-parser": "^1.20.3",
     "express": "^4.17.1",
-    "mongoose": "^8.12.1"
+    "mongoose": "^6.0.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5"
   }
 }
