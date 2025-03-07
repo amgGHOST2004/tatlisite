@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <title>Kayıt Ol</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         .validation-message {
@@ -28,39 +28,39 @@
 </head>
 <body>
     <div class="navbar">
-        <h1>Shipping Site</h1>
+        <h1>Kargo Sitesi</h1>
         <div class="nav-links">
-            <a href="login.html">Login</a>
-            <a href="register.html">Register</a>
+            <a href="login.html">Giriş Yap</a>
+            <a href="register.html">Kayıt Ol</a>
         </div>
     </div>
     <div class="container">
-        <h2>Register</h2>
+        <h2>Kayıt Ol</h2>
         <form id="registerForm">
-            <label for="username">Username:</label>
+            <label for="username">Kullanıcı Adı:</label>
             <input type="text" id="username" name="username" required><br>
-            <label for="email">Email:</label>
+            <label for="email">E-posta:</label>
             <input type="email" id="email" name="email" required><br>
-            <label for="password">Password:</label>
+            <label for="password">Şifre:</label>
             <input type="password" id="password" name="password" required>
             <div id="passwordValidation" class="validation-message">
                 <span id="passwordLength" class="invalid">✗</span>
-                <span>At least 8 characters long</span>
+                <span>En az 8 karakter uzunluğunda</span>
             </div>
             <div class="validation-message">
                 <span id="passwordUppercase" class="invalid">✗</span>
-                <span>At least one uppercase letter</span>
+                <span>En az bir büyük harf</span>
             </div>
             <div class="validation-message">
                 <span id="passwordNumber" class="invalid">✗</span>
-                <span>At least one number</span>
+                <span>En az bir rakam</span>
             </div>
             <div class="validation-message">
                 <span id="passwordSpecial" class="invalid">✗</span>
-                <span>At least one special character</span>
+                <span>En az bir özel karakter</span>
             </div>
-            <button type="submit">Register</button>
-            <p id="warningMessage" class="warning" style="display: none;">Please enter a valid password.</p>
+            <button type="submit">Kayıt Ol</button>
+            <p id="warningMessage" class="warning" style="display: none;">Lütfen geçerli bir şifre girin.</p>
             <p id="errorMessage" class="warning" style="display: none;"></p>
         </form>
     </div>

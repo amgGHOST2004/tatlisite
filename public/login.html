@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Giriş Yap</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         .warning {
@@ -14,23 +14,23 @@
 </head>
 <body>
     <div class="navbar">
-        <h1>Shipping Site</h1>
+        <h1>Kargo Sitesi</h1>
         <div class="nav-links">
-            <a href="login.html">Login</a>
-            <a href="register.html">Register</a>
+            <a href="login.html">Giriş Yap</a>
+            <a href="register.html">Kayıt Ol</a>
         </div>
     </div>
     <div class="container">
-        <h2>Login</h2>
+        <h2>Giriş Yap</h2>
         <form id="loginForm">
-            <label for="username">Username:</label>
+            <label for="username">Kullanıcı Adı:</label>
             <input type="text" id="username" name="username" required><br>
-            <label for="password">Password:</label>
+            <label for="password">Şifre:</label>
             <input type="password" id="password" name="password" required><br>
-            <button type="submit">Login</button>
+            <button type="submit">Giriş Yap</button>
             <p id="errorMessage" class="warning" style="display: none;"></p>
         </form>
-        <p>Don't have an account? <a href="register.html">Register here</a>.</p>
+        <p>Hesabınız yok mu? <a href="register.html">Buradan kayıt olun</a>.</p>
     </div>
     <script>
         document.getElementById('loginForm').addEventListener('submit', async (event) => {
@@ -55,7 +55,7 @@
                     window.location.href = '/home.html';
                 }
             } catch (error) {
-                errorMessage.innerHTML = 'An error occurred. Please try again.';
+                errorMessage.innerHTML = 'Bir hata oluştu. Lütfen tekrar deneyin.';
                 errorMessage.style.display = 'block';
             }
         });
