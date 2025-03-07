@@ -11,6 +11,9 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
+// Mongoose ayarları
+mongoose.set('strictQuery', true);  // Bu satırı ekleyin
+
 // MongoDB bağlantısı
 const mongoURI = process.env.MONGODB_URI;
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
