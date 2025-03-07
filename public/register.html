@@ -123,11 +123,11 @@
                         errorMessage.style.display = 'block';
                     } else {
                         errorMessage.style.display = 'none';
-                        alert('Registration successful! You can now log in.');
+                        alert('Kayıt başarılı! Şimdi giriş yapabilirsiniz.');
                         window.location.href = '/login.html';
                     }
                 } catch (error) {
-                    errorMessage.innerHTML = 'An error occurred. Please try again.';
+                    errorMessage.innerHTML = 'Bir hata oluştu. Lütfen tekrar deneyin.';
                     errorMessage.style.display = 'block';
                 }
             }
