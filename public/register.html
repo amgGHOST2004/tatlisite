@@ -127,6 +127,7 @@
                         window.location.href = '/login.html';
                     }
                 } catch (error) {
+                    console.error('Hata:', error);
                     errorMessage.innerHTML = 'Bir hata oluştu. Lütfen tekrar deneyin.';
                     errorMessage.style.display = 'block';
                 }

@@ -12,13 +12,13 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Mongoose ayarları
-mongoose.set('strictQuery', true);  // Bu satırı ekleyin
+mongoose.set('strictQuery', true);
 
 // MongoDB bağlantısı
 const mongoURI = process.env.MONGODB_URI;
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB bağlantısı başarılı'))
-    .catch(err => console.log('MongoDB bağlantı hatası:', err));
+    .catch(err => console.error('MongoDB bağlantı hatası:', err));
 
 // Kullanıcı modeli
 const User = mongoose.model('User', new mongoose.Schema({
@@ -35,7 +35,8 @@ app.post('/api/users/register', async (req, res) => {
         await newUser.save();
         res.status(201).json({ message: 'Kayıt başarılı!' });
     } catch (error) {
-        res.status(500).json({ message: 'Kayıt sırasında bir hata oluştu.' });
+        console.error('Kayıt sırasında bir hata oluştu:', error);
+        res.status(500).json({ message: 'Kayıt sırasında bir hata oluştu.', error: error.message });
     }
 });
 
