@@ -16,7 +16,12 @@ mongoose.set('strictQuery', true);
 
 // MongoDB bağlantısı
 const mongoURI = process.env.MONGODB_URI;
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(mongoURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000,  // Bağlantı zaman aşımını 5 saniye olarak ayarlayın
+    socketTimeoutMS: 45000  // Soket zaman aşımını 45 saniye olarak ayarlayın
+})
     .then(() => console.log('MongoDB bağlantısı başarılı'))
     .catch(err => console.error('MongoDB bağlantı hatası:', err));
 
@@ -37,6 +42,21 @@ app.post('/api/users/register', async (req, res) => {
     } catch (error) {
         console.error('Kayıt sırasında bir hata oluştu:', error);
         res.status(500).json({ message: 'Kayıt sırasında bir hata oluştu.', error: error.message });
+    }
+});
+
+// Giriş endpoint'i
+app.post('/api/users/login', async (req, res) => {
+    const { username, password } = req.body;
+    try {
+        const user = await User.findOne({ username, password });
+        if (!user) {
+            return res.status(401).json({ message: 'Geçersiz kullanıcı adı veya şifre' });
+        }
+        res.status(200).json({ message: 'Giriş başarılı!' });
+    } catch (error) {
+        console.error('Giriş sırasında bir hata oluştu:', error);
+        res.status(500).json({ message: 'Giriş sırasında bir hata oluştu.', error: error.message });
     }
 });
 
