@@ -76,13 +76,9 @@ body {
 }
 
 .container {
-    background-color: #fff;
+    max-width: 800px;
+    margin: 0 auto;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    text-align: center;
-    margin-top: 20px;
 }
 
 h1, h2 {
@@ -123,4 +119,52 @@ button:hover {
 
 p {
     margin-top: 20px;
+}
+
+/* Admin specific styles */
+#addItemForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#addItemForm input,
+#addItemForm textarea {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#addItemForm button {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#addItemForm button:hover {
+    background-color: #0056b3;
+}
+
+.item {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+.item button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.item button:hover {
+    background-color: #c82333;
 }
