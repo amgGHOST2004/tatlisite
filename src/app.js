@@ -4,12 +4,20 @@ const session = require('express-session');
 const { connectToDatabase } = require('./db-connections');
 const userRoutes = require('./routes/userRoutes');
 const path = require('path');
-
+const auth = require('./middleware/auth');
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Tüm route'lar için middleware kullan
+app.use(auth);
+
+// Route'lar
+app.get('/', (req, res) => {
+    res.send('Ana sayfa');
+});
 
 // Configure sessions
 app.use(session({

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Paneli</title>
+</head>
+<body>
+    <h1>Admin Paneli</h1>
+    <div id="posts"></div>
+
+    <script>
+        const token = localStorage.getItem('token');
+
+        async function fetchPosts() {
+            const response = await fetch('/api/admin/posts', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const posts = await response.json();
+            const postsContainer = document.getElementById('posts');
+
+            posts.forEach(post => {
+                const postElement = document.createElement('div');
+                postElement.innerHTML = `
+                    <h2>${post.title}</h2>
+                    <p>${post.description}</p>
+                    <p>Fiyat: ${post.price} TL</p>
+                    ${post.image ? `<img src="${post.image}" alt="${post.title}" style="max-width: 200px;">` : ''}
+                    <button onclick="deletePost('${post._id}')">Sil</button>
+                    <button onclick="editPost('${post._id}')">Düzenle</button>
+                `;
+                postsContainer.appendChild(postElement);
+            });
+        }
+
+        async function deletePost(id) {
+            const response = await fetch(`/api/admin/posts/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const result = await response.json();
+            if (response.ok) {
+                alert('İlan başarıyla silindi!');
+                window.location.reload();
+            } else {
+                alert('İlan silinirken bir hata oluştu.');
+            }
+        }
+
+        async function editPost(id) {
+            const title = prompt('Yeni başlık:');
+            const description = prompt('Yeni açıklama:');
+            const price = prompt('Yeni fiyat:');
+            const image = prompt('Yeni resim URL\'si:');
+
+            const response = await fetch(`/api/admin/posts/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ title, description, price, image })
+            });
+            const result = await response.json();
+            if (response.ok) {
+                alert('İlan başarıyla güncellendi!');
+                window.location.reload();
+            } else {
+                alert('İlan güncellenirken bir hata oluştu.');
+            }
+        }
+
+        fetchPosts();
+    </script>
+</body>
+</html>
