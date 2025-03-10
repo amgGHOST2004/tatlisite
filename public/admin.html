@@ -29,54 +29,43 @@
         </div>
     </div>
     <script>
-        // Mock data for demonstration
-        let items = [
-            { id: 1, name: 'Item 1', price: 10.99, description: 'Description for Item 1' },
-            { id: 2, name: 'Item 2', price: 15.99, description: 'Description for Item 2' },
-        ];
+        // Check authentication
+        async function checkAuth() {
+            const token = localStorage.getItem('adminToken');
+            if (!token) {
+                window.location.href = 'admin-login.html';
+                return;
+            }
 
-        function renderItems() {
-            const itemList = document.getElementById('itemList');
-            itemList.innerHTML = '';
-            items.forEach(item => {
-                const itemElement = document.createElement('div');
-                itemElement.className = 'item';
-                itemElement.innerHTML = `
-                    <h3>${item.name}</h3>
-                    <p>Price: $${item.price}</p>
-                    <p>${item.description}</p>
-                    <button onclick="deleteItem(${item.id})">Delete</button>
-                `;
-                itemList.appendChild(itemElement);
-            });
+            try {
+                const response = await fetch('/api/admin/check-auth', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Not authenticated');
+                }
+            } catch (error) {
+                console.error('Auth check error:', error);
+                window.location.href = 'admin-login.html';
+            }
         }
 
-        function deleteItem(id) {
-            items = items.filter(item => item.id !== id);
-            renderItems();
-        }
+        checkAuth();
 
-        document.getElementById('addItemForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const newItem = {
-                id: items.length + 1,
-                name: document.getElementById('itemName').value,
-                price: parseFloat(document.getElementById('itemPrice').value),
-                description: document.getElementById('itemDescription').value
-            };
-            items.push(newItem);
-            renderItems();
-            this.reset();
-        });
-
+        // Rest of your admin panel JavaScript code...
+        // (Keep your existing renderItems, deleteItem, and form submission logic here)
         document.getElementById('logoutLink').addEventListener('click', function(e) {
             e.preventDefault();
-            // Here you would typically handle logout logic
+            localStorage.removeItem('adminToken');
             window.location.href = 'admin-login.html';
         });
 
         // Initial render
         renderItems();
     </script>
+
 </body>
 </html>

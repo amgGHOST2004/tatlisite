@@ -7,24 +7,26 @@ require('dotenv').config(); // Load environment variables from .env
 
 const app = express();
 const port = process.env.PORT || 3000;
+const adminRoutes = require('./src/routes/admin');
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
+app.use('/api/admin', adminRoutes);
 
-// Mongoose ayarları
+// Mongoose settings
 mongoose.set('strictQuery', true);
 
-// MongoDB bağlantısı
+// MongoDB connection
 const mongoURI = process.env.MONGODB_URI;
 mongoose.connect(mongoURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    serverSelectionTimeoutMS: 5000,  // Bağlantı zaman aşımını 5 saniye olarak ayarlayın
-    socketTimeoutMS: 45000  // Soket zaman aşımını 45 saniye olarak ayarlayın
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000
 })
-    .then(() => console.log('MongoDB bağlantısı başarılı'))
-    .catch(err => console.error('MongoDB bağlantı hatası:', err));
+    .then(() => console.log('MongoDB connection successful'))
+    .catch(err => console.error('MongoDB connection error:', err));
 
 // Kullanıcı modeli
 const User = mongoose.model('User', new mongoose.Schema({
@@ -70,5 +72,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Sunucu ${port} portunda çalışıyor`);
+    console.log(`Server running on port ${port}`);
 });
