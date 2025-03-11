@@ -3,6 +3,7 @@ const express = require('express');
 const session = require('express-session');
 const { connectToDatabase } = require('./db-connections');
 const userRoutes = require('./routes/userRoutes');
+const adminRoutes = require('./routes/admin');
 const path = require('path');
 const auth = require('./middleware/auth');
 const app = express();
@@ -10,6 +11,7 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/api/admin', adminRoutes);
 
 // Tüm route'lar için middleware kullan
 app.use(auth);

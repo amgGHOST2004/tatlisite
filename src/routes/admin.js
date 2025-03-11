@@ -1,10 +1,8 @@
 const express = require('express');
-const router = express.Router();
 const Admin = require('../models/Admin');
 const jwt = require('jsonwebtoken');
-const auth = require('../middleware/auth');
 
-// Admin login
+const router = express.Router();
 router.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -15,11 +13,15 @@ router.post('/login', async (req, res) => {
         }
 
         const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.json({ token });
+        res.json({ token, message: 'Login successful' });
+
     } catch (error) {
+        console.error('Login error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });
+
+module.exports = router;
 
 // Check authentication
 router.get('/check-auth', auth, (req, res) => {

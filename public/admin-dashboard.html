@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 200px;
+            background-color: #333;
+            color: white;
+            padding: 20px;
+        }
+        .sidebar h2 {
+            margin-bottom: 20px;
+        }
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>Admin Panel</h2>
+            <ul>
+                <li><a href="#" onclick="showSection('dashboard')">Dashboard</a></li>
+                <li><a href="#" onclick="showSection('users')">Users</a></li>
+                <li><a href="#" onclick="showSection('products')">Products</a></li>
+                <li><a href="#" onclick="showSection('orders')">Orders</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <div class="header">
+                <h1 id="sectionTitle">Dashboard</h1>
+                <span id="welcomeMessage"></span>
+            </div>
+            <div id="dashboardSection" class="card">
+                <h2>Overview</h2>
+                <p>Welcome to your admin dashboard. Here you can manage users, products, and orders.</p>
+            </div>
+            <div id="usersSection" class="card" style="display:none;">
+                <h2>User Management</h2>
+                <p>Here you can view and manage user accounts.</p>
+            </div>
+            <div id="productsSection" class="card" style="display:none;">
+                <h2>Product Management</h2>
+                <p>Manage your product inventory here.</p>
+            </div>
+            <div id="ordersSection" class="card" style="display:none;">
+                <h2>Order Management</h2>
+                <p>View and process customer orders.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function isTokenExpired(token) {
+            const payloadBase64 = token.split('.')[1];
+            const decodedJson = atob(payloadBase64);
+            const decoded = JSON.parse(decodedJson);
+            const exp = decoded.exp;
+            const now = Date.now() / 1000;
+            return now > exp;
+        }
+
+        function checkTokenAndFetch() {
+            const token = localStorage.getItem('adminToken');
+            if (!token || isTokenExpired(token)) {
+                console.log('Token is expired or not found');
+                window.location.href = 'admin-login.html';
+            } else {
+                fetchProtectedData();
+            }
+        }
+
+        async function fetchProtectedData() {
+            const token = localStorage.getItem('adminToken');
+            try {
+                const response = await fetch('/api/admin/check-auth', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    console.log('Authentication successful:', data.message);
+                    document.getElementById('welcomeMessage').textContent = `Welcome, Admin!`;
+                } else {
+                    console.error('Authentication failed:', data.message);
+                    window.location.href = 'admin-login.html';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function showSection(sectionName) {
+            const sections = ['dashboard', 'users', 'products', 'orders'];
+            sections.forEach(section => {
+                document.getElementById(`${section}Section`).style.display = 'none';
+            });
+            document.getElementById(`${sectionName}Section`).style.display = 'block';
+            document.getElementById('sectionTitle').textContent = sectionName.charAt(0).toUpperCase() + sectionName.slice(1);
+        }
+
+        function logout() {
+            localStorage.removeItem('adminToken');
+            window.location.href = 'admin-login.html';
+        }
+
+        // Initial check and fetch
+        checkTokenAndFetch();
+    </script>
+</body>
+</html>
