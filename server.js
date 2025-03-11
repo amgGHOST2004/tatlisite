@@ -71,6 +71,14 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// Other imports and middleware...
+
+app.use('/api/admin', adminRoutes);
+
+// Other routes and server setup...
+
+const PORT = process.env.PORT || 3000;
+
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
