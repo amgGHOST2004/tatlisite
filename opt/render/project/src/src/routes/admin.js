@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/auth'); // Adjusted path
+const auth = require('../middleware/auth'); // Make sure this path is correct
 
+console.log('Auth middleware:', auth); // Add this line for debugging
 // Admin login
 router.post('/login', async (req, res) => {
   // Your login logic here
@@ -18,3 +19,4 @@ router.post('/create', async (req, res) => {
 });
 
 module.exports = router;
+
