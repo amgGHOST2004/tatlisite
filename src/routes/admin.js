@@ -8,7 +8,7 @@ router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    // Find the admin
+    // Find the admin in the `admins` collection
     const admin = await Admin.findOne({ username });
     if (!admin) {
       return res.status(400).json({ message: 'Invalid credentials' });
