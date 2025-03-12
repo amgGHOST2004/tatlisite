@@ -31,4 +31,3 @@ adminSchema.methods.comparePassword = async function(candidatePassword) {
 const Admin = mongoose.model('Admin', adminSchema);
 
 module.exports = Admin;
-

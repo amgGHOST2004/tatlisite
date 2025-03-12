@@ -5,6 +5,24 @@ const bcrypt = require('bcryptjs');
 const auth = require('../middleware/auth'); // Import auth middleware
 const Admin = require('../models/Admin'); // Import the Admin model
 
+// routes/admin.js
+const express = require('express');
+
+const auth = require('../middleware/auth'); // Import auth middleware
+const Admin = require('../models/Admin'); // Import the Admin model
+
+// Example route to check authentication
+router.get('/check-auth', auth, async (req, res) => {
+  try {
+    // Your route logic here
+    res.status(200).json({ message: 'Authenticated' });
+  } catch (error) {
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+
+
 router.get('/check-auth', auth, async (req, res) => {
   try {
     // Your route logic here
