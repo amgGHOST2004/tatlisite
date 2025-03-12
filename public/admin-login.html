@@ -20,36 +20,36 @@
     </div>
 
     <script>
-        document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
 
-            try {
-                const response = await fetch('/api/admin/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username, password })
-                });
+  try {
+    const response = await fetch('/api/admin/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username, password })
+    });
 
-                const data = await response.json();
-                if (response.ok) {
-                    // Store the token in localStorage
-                    localStorage.setItem('adminToken', data.token);
-                    console.log('Login successful, token:', data.token);
-                    window.location.href = 'admin-dashboard.html';
-                } else {
-                    document.getElementById('errorMessage').textContent = data.message || 'Login failed';
-                    document.getElementById('errorMessage').style.display = 'block';
-                }
-            } catch (error) {
-                console.error('Login error:', error);
-                document.getElementById('errorMessage').textContent = 'An error occurred. Please try again.';
-                document.getElementById('errorMessage').style.display = 'block';
-            }
-        });
+    const data = await response.json();
+    if (response.ok) {
+      // Store the token in localStorage
+      localStorage.setItem('adminToken', data.token);
+      console.log('Login successful, token:', data.token);
+      window.location.href = 'admin-dashboard.html';
+    } else {
+      document.getElementById('errorMessage').textContent = data.message || 'Login failed';
+      document.getElementById('errorMessage').style.display = 'block';
+    }
+  } catch (error) {
+    console.error('Login error:', error);
+    document.getElementById('errorMessage').textContent = 'An error occurred. Please try again.';
+    document.getElementById('errorMessage').style.display = 'block';
+  }
+});
     </script>
 </body>
 </html>
