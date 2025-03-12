@@ -4,6 +4,9 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config(); // Load environment variables from .env
+const itemsRouter = require('./src/routes/items');
+
+app.use('/api/items', itemsRouter);
 
 const app = express();
 const port = process.env.PORT || 3000;
