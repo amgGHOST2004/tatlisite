@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Add your styles here */
+    </style>
 </head>
 <body>
     <div class="container">
@@ -16,6 +18,7 @@
         </form>
         <p id="errorMessage" style="color: red; display: none;"></p>
     </div>
+
     <script>
         document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -36,7 +39,7 @@
                     // Store the token in localStorage
                     localStorage.setItem('adminToken', data.token);
                     console.log('Login successful, token:', data.token);
-                    window.location.href = 'admin-dashboard.html'; // Redirect to admin dashboard
+                    window.location.href = 'admin-dashboard.html';
                 } else {
                     document.getElementById('errorMessage').textContent = data.message || 'Login failed';
                     document.getElementById('errorMessage').style.display = 'block';
@@ -47,10 +50,7 @@
                 document.getElementById('errorMessage').style.display = 'block';
             }
         });
-
     </script>
-    
-    
 </body>
 </html>
 

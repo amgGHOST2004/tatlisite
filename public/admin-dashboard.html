@@ -102,6 +102,7 @@
 
         function checkTokenAndFetch() {
             const token = localStorage.getItem('adminToken');
+
             if (!token || isTokenExpired(token)) {
                 console.log('Token is expired or not found');
                 window.location.href = 'admin-login.html';
@@ -149,8 +150,9 @@
             window.location.href = 'admin-login.html';
         }
 
-        // Initial check and fetch
-        checkTokenAndFetch();
+    // At the end of your script
+    // Initial check and fetch
+    checkTokenAndFetch();
     </script>
 </body>
 </html>

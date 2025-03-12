@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const Admin = require('../models/Admin'); // Make sure this path is correct
-const auth = require('../middleware/auth'); // Update this path
+const bcrypt = require('bcryptjs');
+const Admin = require('../models/Admin');
 
 // Admin login
 router.post('/login', async (req, res) => {
@@ -23,26 +22,19 @@ router.post('/login', async (req, res) => {
         }
 
         // Create and sign a token
-        const payload = {
-            admin: {
-                id: admin.id
-            }
-        };
-
-        jwt.sign(
-            payload,
+        const token = jwt.sign(
+            { id: admin._id },
             process.env.JWT_SECRET,
-            { expiresIn: '1h' },
-            (err, token) => {
-                if (err) throw err;
-                res.json({ token, adminId: admin.id });
-            }
+            { expiresIn: '1h' }
         );
+
+        res.json({ token, adminId: admin._id });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
     }
 });
+
 
 // Check authentication
 router.get('/check-auth', auth, async (req, res) => {
