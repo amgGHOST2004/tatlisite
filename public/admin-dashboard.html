@@ -123,14 +123,16 @@
                 const data = await response.json();
                 if (response.ok) {
                     console.log('Authentication successful:', data.message);
-                    document.getElementById('welcomeMessage').textContent = `Welcome, Admin!`;
+                    document.getElementById('welcomeMessage').textContent = `Welcome, Admin! (ID: ${data.adminId})`;
                 } else {
                     console.error('Authentication failed:', data.message);
                     window.location.href = 'admin-login.html';
                 }
             } catch (error) {
                 console.error('Error:', error);
+                window.location.href = 'admin-login.html';
             }
+
         }
 
         function showSection(sectionName) {

@@ -3,7 +3,16 @@ const path = require('path');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-require('dotenv').config(); // Load environment variables from .env
+require('dotenv').config();
+// ... other imports and setup
+
+// Make sure your .env file has a JWT_SECRET defined
+if (!process.env.JWT_SECRET) {
+    console.error('JWT_SECRET is not set in the environment variables');
+    process.exit(1);
+}
+
+// ... rest of your server setup
 const itemsRouter = require('./src/routes/items');
 
 app.use('/api/items', itemsRouter);
@@ -15,7 +24,6 @@ const adminRoutes = require('./src/routes/admin');
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/api/admin', adminRoutes);
 
 // Mongoose settings
 mongoose.set('strictQuery', true);
@@ -79,6 +87,7 @@ app.get('/', (req, res) => {
 app.use('/api/admin', adminRoutes);
 
 // Other routes and server setup...
+
 
 const PORT = process.env.PORT || 3000;
 

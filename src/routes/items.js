@@ -3,6 +3,8 @@ const router = express.Router();
 const Item = require('../models/itemModel');
 const authMiddleware = require('../middleware/authMiddleware');
 
+// ... rest of your code
+
 router.post('/', authMiddleware, async (req, res) => {
     try {
         const newItem = new Item(req.body);
