@@ -2,7 +2,17 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const Admin = require('../models/Admin');
+const auth = require('../middleware/auth'); // Import auth middleware
+const Admin = require('../models/Admin'); // Import the Admin model
+
+router.get('/check-auth', auth, async (req, res) => {
+  try {
+    // Your route logic here
+    res.status(200).json({ message: 'Authenticated' });
+  } catch (error) {
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
 
 // Admin login
 router.post('/login', async (req, res) => {
