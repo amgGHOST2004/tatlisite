@@ -6,6 +6,11 @@
     <title>Admin Login</title>
     <style>
         /* Add your styles here */
+        .error-message {
+            color: red;
+            display: none;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -16,41 +21,45 @@
             <input type="password" id="password" name="password" placeholder="Password" required>
             <button type="submit">Login</button>
         </form>
-        <p id="errorMessage" style="color: red; display: none;"></p>
+        <p id="errorMessage" class="error-message"></p>
     </div>
 
     <script>
-document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const username = document.getElementById('username').value;
-  const password = document.getElementById('password').value;
+        document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
 
-  try {
-    const response = await fetch('/api/admin/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ username, password })
-    });
+            // Clear previous error messages
+            document.getElementById('errorMessage').textContent = '';
+            document.getElementById('errorMessage').style.display = 'none';
 
-    const data = await response.json();
-    if (response.ok) {
-      // Store the token in localStorage
-      localStorage.setItem('adminToken', data.token);
-      console.log('Login successful, token:', data.token);
-      window.location.href = 'admin-dashboard.html';
-    } else {
-      document.getElementById('errorMessage').textContent = data.message || 'Login failed';
-      document.getElementById('errorMessage').style.display = 'block';
-    }
-  } catch (error) {
-    console.error('Login error:', error);
-    document.getElementById('errorMessage').textContent = 'An error occurred. Please try again.';
-    document.getElementById('errorMessage').style.display = 'block';
-  }
-});
+            try {
+                const response = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    // Store the token in localStorage
+                    localStorage.setItem('adminToken', data.token);
+                    console.log('Login successful, token:', data.token);
+                    window.location.href = 'admin-dashboard.html';
+                } else {
+                    // Display error message from the server
+                    document.getElementById('errorMessage').textContent = data.message || 'Login failed';
+                    document.getElementById('errorMessage').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                document.getElementById('errorMessage').textContent = 'An error occurred. Please try again.';
+                document.getElementById('errorMessage').style.display = 'block';
+            }
+        });
     </script>
 </body>
 </html>
-
