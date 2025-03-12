@@ -15,7 +15,7 @@ if (!process.env.JWT_SECRET) {
 // ... rest of your server setup
 const itemsRouter = require('./src/routes/items');
 
-app.use('/api/items', itemsRouter);
+
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -88,6 +88,7 @@ app.use('/api/admin', adminRoutes);
 
 // Other routes and server setup...
 
+app.use('/api/items', itemsRouter);
 
 const PORT = process.env.PORT || 3000;
 
