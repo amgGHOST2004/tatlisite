@@ -1,8 +1,7 @@
-// routes/User.js
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User'); // Import the User model
-const bcrypt = require('bcrypt');
+const User = require('../models/User');
+const bcrypt = require('bcryptjs'); // Use bcryptjs instead of bcrypt
 const jwt = require('jsonwebtoken');
 
 // ✅ Tüm kullanıcıları getir
