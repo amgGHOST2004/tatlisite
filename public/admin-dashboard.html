@@ -34,6 +34,13 @@
         .sidebar ul li a {
             color: white;
             text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .sidebar ul li a:hover {
+            background-color: #555;
         }
         .main-content {
             flex-grow: 1;
@@ -52,10 +59,26 @@
             margin-bottom: 20px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Sidebar -->
         <div class="sidebar">
             <h2>Admin Panel</h2>
             <ul>
@@ -66,79 +89,167 @@
                 <li><a href="#" onclick="logout()">Logout</a></li>
             </ul>
         </div>
+
+        <!-- Main Content -->
         <div class="main-content">
             <div class="header">
                 <h1 id="sectionTitle">Dashboard</h1>
                 <span id="welcomeMessage"></span>
             </div>
+
+            <!-- Dashboard Section -->
             <div id="dashboardSection" class="card">
                 <h2>Overview</h2>
                 <p>Welcome to your admin dashboard. Here you can manage users, products, and orders.</p>
+                <div>
+                    <h3>Quick Stats</h3>
+                    <ul>
+                        <li>Total Users: <span id="totalUsers">0</span></li>
+                        <li>Total Products: <span id="totalProducts">0</span></li>
+                        <li>Total Orders: <span id="totalOrders">0</span></li>
+                    </ul>
+                </div>
             </div>
+
+            <!-- Users Section -->
             <div id="usersSection" class="card" style="display:none;">
                 <h2>User Management</h2>
                 <p>Here you can view and manage user accounts.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <!-- Users will be dynamically populated here -->
+                    </tbody>
+                </table>
             </div>
+
+            <!-- Products Section -->
             <div id="productsSection" class="card" style="display:none;">
                 <h2>Product Management</h2>
                 <p>Manage your product inventory here.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTableBody">
+                        <!-- Products will be dynamically populated here -->
+                    </tbody>
+                </table>
             </div>
+
+            <!-- Orders Section -->
             <div id="ordersSection" class="card" style="display:none;">
                 <h2>Order Management</h2>
                 <p>View and process customer orders.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <!-- Orders will be dynamically populated here -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
     <script>
-async function fetchProtectedData() {
-    const token = localStorage.getItem('adminToken');
-
-    if (!token || isTokenExpired(token)) {
-        console.log('Token is expired or not found');
-        window.location.href = 'admin-login.html';
-        return;
-    }
-
-    try {
-        const response = await fetch('/api/admin/check-auth', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            // Check if the user is an admin in MongoDB
-            const adminCheckResponse = await fetch('/api/admin/check-admin', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ adminId: data.adminId })
+        // Function to show the selected section
+        function showSection(sectionName) {
+            const sections = ['dashboard', 'users', 'products', 'orders'];
+            sections.forEach(section => {
+                document.getElementById(`${section}Section`).style.display = 'none';
             });
+            document.getElementById(`${sectionName}Section`).style.display = 'block';
+            document.getElementById('sectionTitle').textContent = sectionName.charAt(0).toUpperCase() + sectionName.slice(1);
+        }
 
-            const adminCheckData = await adminCheckResponse.json();
-
-            if (adminCheckResponse.ok && adminCheckData.isAdmin) {
-                console.log('Authentication successful:', data.message);
-                document.getElementById('welcomeMessage').textContent = `Welcome, Admin! (ID: ${data.adminId})`;
-            } else {
-                console.error('User is not an admin:', adminCheckData.message);
-                window.location.href = 'admin-login.html';
-            }
-        } else {
-            console.error('Authentication failed:', data.message);
+        // Function to handle logout
+        function logout() {
+            localStorage.removeItem('adminToken');
             window.location.href = 'admin-login.html';
         }
-    } catch (error) {
-        console.error('Error:', error);
-        window.location.href = 'admin-login.html';
-    }
-}
+
+        // Function to fetch and display data (mock data for now)
+        function fetchData() {
+            // Mock data for demonstration
+            const users = [
+                { id: 1, username: 'user1', email: 'user1@example.com' },
+                { id: 2, username: 'user2', email: 'user2@example.com' }
+            ];
+
+            const products = [
+                { id: 1, name: 'Product 1', price: 10.99, stock: 100 },
+                { id: 2, name: 'Product 2', price: 20.99, stock: 50 }
+            ];
+
+            const orders = [
+                { id: 1, customer: 'Customer 1', total: 50.99, status: 'Pending' },
+                { id: 2, customer: 'Customer 2', total: 100.99, status: 'Shipped' }
+            ];
+
+            // Populate Users Table
+            const usersTableBody = document.getElementById('usersTableBody');
+            usersTableBody.innerHTML = users.map(user => `
+                <tr>
+                    <td>${user.id}</td>
+                    <td>${user.username}</td>
+                    <td>${user.email}</td>
+                    <td><button>Edit</button> <button>Delete</button></td>
+                </tr>
+            `).join('');
+
+            // Populate Products Table
+            const productsTableBody = document.getElementById('productsTableBody');
+            productsTableBody.innerHTML = products.map(product => `
+                <tr>
+                    <td>${product.id}</td>
+                    <td>${product.name}</td>
+                    <td>$${product.price.toFixed(2)}</td>
+                    <td>${product.stock}</td>
+                    <td><button>Edit</button> <button>Delete</button></td>
+                </tr>
+            `).join('');
+
+            // Populate Orders Table
+            const ordersTableBody = document.getElementById('ordersTableBody');
+            ordersTableBody.innerHTML = orders.map(order => `
+                <tr>
+                    <td>${order.id}</td>
+                    <td>${order.customer}</td>
+                    <td>$${order.total.toFixed(2)}</td>
+                    <td>${order.status}</td>
+                    <td><button>Process</button></td>
+                </tr>
+            `).join('');
+
+            // Update Quick Stats
+            document.getElementById('totalUsers').textContent = users.length;
+            document.getElementById('totalProducts').textContent = products.length;
+            document.getElementById('totalOrders').textContent = orders.length;
+        }
+
+        // Fetch data when the page loads
+        fetchData();
     </script>
 </body>
 </html>
