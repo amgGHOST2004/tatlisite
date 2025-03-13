@@ -82,11 +82,18 @@
         </div>
     </div>
     <script>
-        function showSection(section) {
-            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-            document.getElementById(section).classList.add('active');
-            if (section === 'products') fetchProducts();
-        }
+function showSection(section) {
+    const sectionElement = document.getElementById(section);
+    if (!sectionElement) {
+        console.error(`Section ${section} not found!`);
+        return;
+    }
+    document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+    sectionElement.classList.add('active');
+
+    if (section === 'products') fetchProducts();
+}
+
         async function fetchProducts() {
             try {
                 const response = await fetch('/api/products');
