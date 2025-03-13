@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ana Sayfa</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="navbar">
@@ -14,7 +15,9 @@
             <a href="register.html">Register</a>
         </div>
     </div>
-    <div id="itemList"></div>
+    <div class="container">
+        <div id="itemList"></div>
+    </div>
     <script>
         async function fetchItems() {
             try {
@@ -36,8 +39,8 @@
                 console.error('Error fetching items:', error);
             }
         }
-        
+
         fetchItems();
-        </script>
+    </script>
 </body>
 </html>

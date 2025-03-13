@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="navbar">
@@ -28,117 +29,56 @@
             <!-- Items will be dynamically added here -->
         </div>
     </div>
-<<<<<<< Tabnine <<<<<<<
+
     <script>
-        // Check authentication
-        async function checkAuth() {
-            const token = localStorage.getItem('adminToken');
-            if (!token) {
-                window.location.href = 'admin-login.html';
-                return;
-            }
+        // Mock data for demonstration
+        let items = [
+            { id: 1, name: 'Item 1', price: 10.99, description: 'Description for Item 1' },
+            { id: 2, name: 'Item 2', price: 15.99, description: 'Description for Item 2' },
+        ];
 
-            try {
-                const response = await fetch('/api/admin/check-auth', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error('Not authenticated');
-                }
-            } catch (error) {
-                console.error('Auth check error:', error);
-                window.location.href = 'admin-login.html';
-            }
+        function renderItems() {
+            const itemList = document.getElementById('itemList');
+            itemList.innerHTML = '';
+            items.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'item';
+                itemElement.innerHTML = `
+                    <h3>${item.name}</h3>
+                    <p>Price: $${item.price}</p>
+                    <p>${item.description}</p>
+                    <button onclick="deleteItem(${item.id})">Delete</button>
+                `;
+                itemList.appendChild(itemElement);
+            });
         }
 
-        checkAuth();
+        function deleteItem(id) {
+            items = items.filter(item => item.id !== id);
+            renderItems();
+        }
 
-        // Rest of your admin panel JavaScript code...//-
-        // (Keep your existing renderItems, deleteItem, and form submission logic here)//-
-        document.getElementById('addItemForm').addEventListener('submit', async function(e) {//+
-            e.preventDefault();//+
-            const newItem = {//+
-                name: document.getElementById('itemName').value,//+
-                price: parseFloat(document.getElementById('itemPrice').value),//+
-                description: document.getElementById('itemDescription').value//+
-            };//+
-//+
-            try {//+
-                const response = await fetch('/api/items', {//+
-                    method: 'POST',//+
-                    headers: {//+
-                        'Content-Type': 'application/json',//+
-                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`//+
-                    },//+
-                    body: JSON.stringify(newItem)//+
-                });//+
-//+
-                if (response.ok) {//+
-                    alert('Item added successfully');//+
-                    this.reset();//+
-                    renderItems(); // Refresh the item list//+
-                } else {//+
-                    alert('Failed to add item');//+
-                }//+
-            } catch (error) {//+
-                console.error('Error:', error);//+
-                alert('An error occurred while adding the item');//+
-            }//+
-        });//+
-//+
-        async function renderItems() {//+
-            try {//+
-                const response = await fetch('/api/items');//+
-                const items = await response.json();//+
-                const itemList = document.getElementById('itemList');//+
-                itemList.innerHTML = '';//+
-                items.forEach(item => {//+
-                    const itemElement = document.createElement('div');//+
-                    itemElement.className = 'item';//+
-                    itemElement.innerHTML = `//+
-                        <h3>${item.name}</h3>//+
-                        <p>Price: ${item.price}</p>//+
-                        <p>${item.description}</p>//+
-                        <button onclick="deleteItem('${item._id}')">Delete</button>//+
-                    `;//+
-                    itemList.appendChild(itemElement);//+
-                });//+
-            } catch (error) {//+
-                console.error('Error fetching items:', error);//+
-            }//+
-        }//+
-//+
-        async function deleteItem(id) {//+
-            try {//+
-                const response = await fetch(`/api/items/${id}`, {//+
-                    method: 'DELETE',//+
-                    headers: {//+
-                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`//+
-                    }//+
-                });//+
-                if (response.ok) {//+
-                    renderItems(); // Refresh the item list//+
-                } else {//+
-                    alert('Failed to delete item');//+
-                }//+
-            } catch (error) {//+
-                console.error('Error:', error);//+
-                alert('An error occurred while deleting the item');//+
-            }//+
-        }//+
+        document.getElementById('addItemForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const newItem = {
+                id: items.length + 1,
+                name: document.getElementById('itemName').value,
+                price: parseFloat(document.getElementById('itemPrice').value),
+                description: document.getElementById('itemDescription').value
+            };
+            items.push(newItem);
+            renderItems();
+            this.reset();
+        });
+
         document.getElementById('logoutLink').addEventListener('click', function(e) {
             e.preventDefault();
-            localStorage.removeItem('adminToken');
+            // Here you would typically handle logout logic
             window.location.href = 'admin-login.html';
         });
 
         // Initial render
         renderItems();
     </script>
->>>>>>> Tabnine >>>>>>>// {"source":"chat"}
-
 </body>
 </html>
