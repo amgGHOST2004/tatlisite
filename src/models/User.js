@@ -2,13 +2,12 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const User = require('../models/User'); // Kullanıcı modelini içe aktar
-const Product = require('../models/Product'); // Ürün modelini içe aktar
-const mongoose = require('mongoose');
+const User = require('../models/User'); // Import the User model
+const Product = require('../models/Product'); // Import the Product model
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-// Define the User schema
+// Define the User schema (if needed for additional methods or statics)
 const userSchema = new mongoose.Schema({
   username: String,
   email: String,
