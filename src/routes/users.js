@@ -4,22 +4,55 @@ const multer = require('multer');
 const path = require('path');
 const User = require('../models/User'); // Kullanıcı modelini içe aktar
 const Product = require('../models/Product'); // Ürün modelini içe aktar
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
-router.post('/register', async (req, res) => {
+// Define the User schema
+const userSchema = new mongoose.Schema({
+  username: String,
+  email: String,
+  password: String,
+});
+
+// Hash password before saving
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
   try {
-    const { username, email, password } = req.body;
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: 'Bu e-posta zaten kullanılıyor' });
-    }
-    const newUser = new User({ username, email, password });
-    await newUser.save();
-    res.status(201).json({ message: 'Kullanıcı başarıyla kaydedildi!' });
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
   } catch (error) {
-    res.status(500).json({ message: 'Kayıt sırasında hata oluştu.', error: error.message });
+    next(error);
   }
 });
 
+// ✅ Kullanıcı kaydı (Register)
+userSchema.statics.registerUser = async function (username, email, password) {
+  const existingUser = await this.findOne({ email });
+  if (existingUser) {
+    throw new Error('Bu e-posta zaten kullanılıyor');
+  }
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const newUser = new this({ username, email, password: hashedPassword });
+  return newUser.save();
+};
+
+// ✅ Kullanıcı girişi (Login)
+userSchema.statics.loginUser = async function (email, password) {
+  const user = await this.findOne({ email });
+  if (!user) {
+    throw new Error('Geçersiz e-posta veya şifre');
+  }
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    throw new Error('Geçersiz e-posta veya şifre');
+  }
+  return jwt.sign({ userId: user._id }, 'secretKey', { expiresIn: '1h' });
+};
+
+// Define the User model
+const User = mongoose.model('User', userSchema, 'users');
 
 // ✅ Tüm kullanıcıları getir
 router.get('/', async (req, res) => {
