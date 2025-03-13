@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="navbar">
@@ -22,18 +23,13 @@
             <textarea id="itemDescription" name="itemDescription" placeholder="Description" required></textarea>
             <button type="submit">Add Item</button>
         </form>
-
         <h2>Current Items</h2>
-        <div id="itemList">
-            <!-- Items will be dynamically added here -->
-        </div>
+        <div id="itemList"></div>
     </div>
-
     <script>
-        // Mock data for demonstration
         let items = [
             { id: 1, name: 'Item 1', price: 10.99, description: 'Description for Item 1' },
-            { id: 2, name: 'Item 2', price: 15.99, description: 'Description for Item 2' },
+            { id: 2, name: 'Item 2', price: 15.99, description: 'Description for Item 2' }
         ];
 
         function renderItems() {
@@ -41,7 +37,7 @@
             itemList.innerHTML = '';
             items.forEach(item => {
                 const itemElement = document.createElement('div');
-                itemElement.className = 'item';
+                itemElement.className = 'card';
                 itemElement.innerHTML = `
                     <h3>${item.name}</h3>
                     <p>Price: $${item.price}</p>
@@ -72,11 +68,9 @@
 
         document.getElementById('logoutLink').addEventListener('click', function(e) {
             e.preventDefault();
-            // Here you would typically handle logout logic
             window.location.href = 'admin-login.html';
         });
 
-        // Initial render
         renderItems();
     </script>
 </body>
