@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shipping Site - Home</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="navbar">
@@ -13,7 +12,7 @@
         <div class="profile-menu">
             <button>Profile</button>
             <div class="profile-menu-content">
-                <a href="/api/users/logout">Log Out</a>
+                <a href="#" id="logoutLink">Log Out</a>
                 <a href="sepet.html">Sepet</a>
                 <a href="addresses.html">Addresses</a>
                 <a href="account-settings.html">Account Settings</a>
@@ -44,8 +43,13 @@
                 console.error('Error fetching items:', error);
             }
         }
-
         fetchItems();
+        
+        document.getElementById('logoutLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('adminToken');
+            window.location.href = 'login.html';
+        });
     </script>
 </body>
 </html>

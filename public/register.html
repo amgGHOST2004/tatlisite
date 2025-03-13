@@ -5,26 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kayıt Ol</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        .validation-message {
-            display: flex;
-            align-items: center;
-            margin-top: 5px;
-        }
-        .validation-message span {
-            margin-left: 5px;
-        }
-        .valid {
-            color: green;
-        }
-        .invalid {
-            color: red;
-        }
-        .warning {
-            color: red;
-            margin-top: 10px;
-        }
-    </style>
 </head>
 <body>
     <div class="navbar">
@@ -34,103 +14,43 @@
             <a href="register.html">Kayıt Ol</a>
         </div>
     </div>
-    <div class="container">
-        <h2>Kayıt Ol</h2>
-        <form id="registerForm">
-            <label for="username">Kullanıcı Adı:</label>
-            <input type="text" id="username" name="username" required><br>
-            <label for="email">E-posta:</label>
-            <input type="email" id="email" name="email" required><br>
-            <label for="password">Şifre:</label>
-            <input type="password" id="password" name="password" required>
-            <div id="passwordValidation" class="validation-message">
-                <span id="passwordLength" class="invalid">✗</span>
-                <span>En az 8 karakter uzunluğunda</span>
-            </div>
-            <div class="validation-message">
-                <span id="passwordUppercase" class="invalid">✗</span>
-                <span>En az bir büyük harf</span>
-            </div>
-            <div class="validation-message">
-                <span id="passwordNumber" class="invalid">✗</span>
-                <span>En az bir rakam</span>
-            </div>
-            <div class="validation-message">
-                <span id="passwordSpecial" class="invalid">✗</span>
-                <span>En az bir özel karakter</span>
-            </div>
-            <button type="submit">Kayıt Ol</button>
-            <p id="warningMessage" class="warning" style="display: none;">Lütfen geçerli bir şifre girin.</p>
-            <p id="errorMessage" class="warning" style="display: none;"></p>
-        </form>
+    <div class="login-container">
+        <div class="login-form">
+            <h2>Kayıt Ol</h2>
+            <form id="registerForm">
+                <input type="text" id="username" name="username" placeholder="Kullanıcı Adı" required>
+                <input type="email" id="email" name="email" placeholder="E-posta" required>
+                <input type="password" id="password" name="password" placeholder="Şifre" required>
+                <button type="submit">Kayıt Ol</button>
+                <p id="errorMessage" class="error-message"></p>
+            </form>
+        </div>
     </div>
     <script>
-        const passwordInput = document.getElementById('password');
-        const passwordLength = document.getElementById('passwordLength');
-        const passwordUppercase = document.getElementById('passwordUppercase');
-        const passwordNumber = document.getElementById('passwordNumber');
-        const passwordSpecial = document.getElementById('passwordSpecial');
-        const warningMessage = document.getElementById('warningMessage');
-        const errorMessage = document.getElementById('errorMessage');
-
-        passwordInput.addEventListener('input', () => {
-            const password = passwordInput.value;
-            const lengthValid = password.length >= 8;
-            const uppercaseValid = /[A-Z]/.test(password);
-            const numberValid = /\d/.test(password);
-            const specialValid = /[@$!%*?&]/.test(password);
-
-            passwordLength.classList.toggle('valid', lengthValid);
-            passwordLength.classList.toggle('invalid', !lengthValid);
-            passwordLength.textContent = lengthValid ? '✓' : '✗';
-
-            passwordUppercase.classList.toggle('valid', uppercaseValid);
-            passwordUppercase.classList.toggle('invalid', !uppercaseValid);
-            passwordUppercase.textContent = uppercaseValid ? '✓' : '✗';
-
-            passwordNumber.classList.toggle('valid', numberValid);
-            passwordNumber.classList.toggle('invalid', !numberValid);
-            passwordNumber.textContent = numberValid ? '✓' : '✗';
-
-            passwordSpecial.classList.toggle('valid', specialValid);
-            passwordSpecial.classList.toggle('invalid', !specialValid);
-            passwordSpecial.textContent = specialValid ? '✓' : '✗';
-        });
-
         document.getElementById('registerForm').addEventListener('submit', async (event) => {
             event.preventDefault();
             const username = document.getElementById('username').value;
             const email = document.getElementById('email').value;
-            const password = passwordInput.value;
-            const passwordValid = password.length >= 8 && /[A-Z]/.test(password) && /\d/.test(password) && /[@$!%*?&]/.test(password);
-
-            if (!passwordValid) {
-                warningMessage.style.display = 'block';
-                errorMessage.style.display = 'none';
-            } else {
-                warningMessage.style.display = 'none';
-                try {
-                    const response = await fetch('https://tatlisite.onrender.com/api/users/register', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ username, email, password })
-                    });
-                    const result = await response.json();
-                    if (!response.ok) {
-                        errorMessage.innerHTML = result.message;
-                        errorMessage.style.display = 'block';
-                    } else {
-                        errorMessage.style.display = 'none';
-                        alert('Kayıt başarılı! Şimdi giriş yapabilirsiniz.');
-                        window.location.href = '/login.html';
-                    }
-                } catch (error) {
-                    console.error('Hata:', error);
-                    errorMessage.innerHTML = 'Bir hata oluştu. Lütfen tekrar deneyin.';
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            try {
+                const response = await fetch('https://tatlisite.onrender.com/api/users/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password })
+                });
+                const result = await response.json();
+                if (!response.ok) {
+                    errorMessage.innerHTML = result.message;
                     errorMessage.style.display = 'block';
+                } else {
+                    errorMessage.style.display = 'none';
+                    alert('Kayıt başarılı! Şimdi giriş yapabilirsiniz.');
+                    window.location.href = 'login.html';
                 }
+            } catch (error) {
+                errorMessage.innerHTML = 'Bir hata oluştu. Lütfen tekrar deneyin.';
+                errorMessage.style.display = 'block';
             }
         });
     </script>
