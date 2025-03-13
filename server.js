@@ -7,6 +7,7 @@ require('dotenv').config();
 const Admin = require('./src/models/Admin'); // Ensure Admin model is imported
 const jwt = require('jsonwebtoken'); // Import jwt for token generation
 const userRoutes = require('./src/routes/users'); // Import user routes
+const User = require('./src/models/User'); // Import User model
 
 // Make sure your .env file has a JWT_SECRET defined
 if (!process.env.JWT_SECRET) {
@@ -36,16 +37,6 @@ mongoose
   })
   .then(() => console.log('MongoDB connection successful'))
   .catch((err) => console.error('MongoDB connection error:', err));
-
-// User model
-const User = mongoose.model(
-  'User',
-  new mongoose.Schema({
-    username: String,
-    email: String,
-    password: String,
-  })
-);
 
 // Register endpoint
 app.post('/api/users/register', async (req, res) => {
