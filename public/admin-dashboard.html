@@ -55,6 +55,12 @@
             max-width: 100px;
             border-radius: 5px;
         }
+        .section {
+            display: none; /* Hide all sections by default */
+        }
+        .section.active {
+            display: block; /* Show the active section */
+        }
     </style>
 </head>
 <body>
@@ -69,6 +75,19 @@
         </ul>
     </div>
     <div class="main-content">
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="section">
+            <h1>Ana Sayfa</h1>
+            <p>Hoş geldiniz! Bu yönetici paneli ana sayfasıdır.</p>
+        </div>
+
+        <!-- Users Section -->
+        <div id="users" class="section">
+            <h1>Kullanıcı Yönetimi</h1>
+            <p>Kullanıcı yönetimi ile ilgili içerik burada yer alacak.</p>
+        </div>
+
+        <!-- Products Section -->
         <div id="products" class="section">
             <h1>Ürün Yönetimi</h1>
             <form id="addProductForm" enctype="multipart/form-data">
@@ -80,19 +99,25 @@
             </form>
             <div id="productList"></div>
         </div>
+
+        <!-- Orders Section -->
+        <div id="orders" class="section">
+            <h1>Sipariş Yönetimi</h1>
+            <p>Sipariş yönetimi ile ilgili içerik burada yer alacak.</p>
+        </div>
     </div>
     <script>
-function showSection(section) {
-    const sectionElement = document.getElementById(section);
-    if (!sectionElement) {
-        console.error(`Section ${section} not found!`);
-        return;
-    }
-    document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-    sectionElement.classList.add('active');
+        function showSection(section) {
+            const sectionElement = document.getElementById(section);
+            if (!sectionElement) {
+                console.error(`Section ${section} not found!`);
+                return;
+            }
+            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+            sectionElement.classList.add('active');
 
-    if (section === 'products') fetchProducts();
-}
+            if (section === 'products') fetchProducts();
+        }
 
         async function fetchProducts() {
             try {
@@ -114,6 +139,7 @@ function showSection(section) {
                 console.error('Ürünler alınırken hata oluştu:', error);
             }
         }
+
         document.getElementById('addProductForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const formData = new FormData(this);
@@ -133,11 +159,15 @@ function showSection(section) {
                 console.error('Ürün ekleme hatası:', error);
             }
         });
+
         document.getElementById('logoutLink').addEventListener('click', function(e) {
             e.preventDefault();
             localStorage.removeItem('adminToken');
             window.location.href = 'admin-login.html';
         });
+
+        // Show the dashboard section by default when the page loads
+        showSection('dashboard');
     </script>
 </body>
 </html>
