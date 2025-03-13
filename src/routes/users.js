@@ -1,17 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
-require('dotenv').config();
-
-// Define the User schema
-const userSchema = new mongoose.Schema({
-  username: String,
-  email: String,
-  password: String,
-});
-
-// Define the User model
-const User = mongoose.model('User', userSchema, 'users');
+const User = require('../models/User'); // Import the User model
 
 // API endpoint to fetch users
 router.get('/users', async (req, res) => {
