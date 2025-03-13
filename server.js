@@ -6,8 +6,8 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Initialize the Express app
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -38,8 +38,13 @@ mongoose
   .then(() => console.log('MongoDB bağlantısı başarılı'))
   .catch((err) => console.error('MongoDB bağlantı hatası:', err));
 
-// Static files
+// Serve static files from the "uploads" directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Default route
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
