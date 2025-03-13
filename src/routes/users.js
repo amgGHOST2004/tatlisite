@@ -5,6 +5,22 @@ const path = require('path');
 const User = require('../models/User'); // Kullanıcı modelini içe aktar
 const Product = require('../models/Product'); // Ürün modelini içe aktar
 
+router.post('/register', async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Bu e-posta zaten kullanılıyor' });
+    }
+    const newUser = new User({ username, email, password });
+    await newUser.save();
+    res.status(201).json({ message: 'Kullanıcı başarıyla kaydedildi!' });
+  } catch (error) {
+    res.status(500).json({ message: 'Kayıt sırasında hata oluştu.', error: error.message });
+  }
+});
+
+
 // ✅ Tüm kullanıcıları getir
 router.get('/', async (req, res) => {
   try {
