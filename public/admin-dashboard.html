@@ -4,11 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-    <style>
-        /* Add your existing styles here */
-    </style>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to the CSS file -->
 </head>
 <body>
+    <div class="navbar">
+        <h1>Admin Dashboard</h1>
+        <div class="profile-menu">
+            <button>Admin</button>
+            <div class="profile-menu-content">
+                <a href="#" onclick="logout()">Logout</a>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <!-- Sidebar -->
         <div class="sidebar">
@@ -18,7 +26,6 @@
                 <li><a href="#" onclick="showSection('users')">Users</a></li>
                 <li><a href="#" onclick="showSection('products')">Products</a></li>
                 <li><a href="#" onclick="showSection('orders')">Orders</a></li>
-                <li><a href="#" onclick="logout()">Logout</a></li>
             </ul>
         </div>
 
