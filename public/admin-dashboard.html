@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="navbar">
@@ -17,97 +18,93 @@
         </div>
     </div>
 
-    <div class="container">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <h2>Admin Panel</h2>
-            <ul>
-                <li><a href="#" onclick="showSection('dashboard')">Dashboard</a></li>
-                <li><a href="#" onclick="showSection('users')">Users</a></li>
-                <li><a href="#" onclick="showSection('products')">Products</a></li>
-                <li><a href="#" onclick="showSection('orders')">Orders</a></li>
-            </ul>
+    <div class="sidebar">
+        <h2>Admin Panel</h2>
+        <ul>
+            <li><a href="#" onclick="showSection('dashboard')">Dashboard</a></li>
+            <li><a href="#" onclick="showSection('users')">Users</a></li>
+            <li><a href="#" onclick="showSection('products')">Products</a></li>
+            <li><a href="#" onclick="showSection('orders')">Orders</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h1 id="sectionTitle">Dashboard</h1>
+            <span id="welcomeMessage"></span>
         </div>
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <div class="header">
-                <h1 id="sectionTitle">Dashboard</h1>
-                <span id="welcomeMessage"></span>
+        <!-- Dashboard Section -->
+        <div id="dashboardSection" class="card">
+            <h2>Overview</h2>
+            <p>Welcome to your admin dashboard. Here you can manage users, products, and orders.</p>
+            <div>
+                <h3>Quick Stats</h3>
+                <ul>
+                    <li>Total Users: <span id="totalUsers">0</span></li>
+                    <li>Total Products: <span id="totalProducts">0</span></li>
+                    <li>Total Orders: <span id="totalOrders">0</span></li>
+                </ul>
             </div>
+        </div>
 
-            <!-- Dashboard Section -->
-            <div id="dashboardSection" class="card">
-                <h2>Overview</h2>
-                <p>Welcome to your admin dashboard. Here you can manage users, products, and orders.</p>
-                <div>
-                    <h3>Quick Stats</h3>
-                    <ul>
-                        <li>Total Users: <span id="totalUsers">0</span></li>
-                        <li>Total Products: <span id="totalProducts">0</span></li>
-                        <li>Total Orders: <span id="totalOrders">0</span></li>
-                    </ul>
-                </div>
-            </div>
+        <!-- Users Section -->
+        <div id="usersSection" class="card" style="display:none;">
+            <h2>User Management</h2>
+            <p>Here you can view and manage user accounts.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <!-- Users will be dynamically populated here -->
+                </tbody>
+            </table>
+        </div>
 
-            <!-- Users Section -->
-            <div id="usersSection" class="card" style="display:none;">
-                <h2>User Management</h2>
-                <p>Here you can view and manage user accounts.</p>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="usersTableBody">
-                        <!-- Users will be dynamically populated here -->
-                    </tbody>
-                </table>
-            </div>
+        <!-- Products Section -->
+        <div id="productsSection" class="card" style="display:none;">
+            <h2>Product Management</h2>
+            <p>Manage your product inventory here.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="productsTableBody">
+                    <!-- Products will be dynamically populated here -->
+                </tbody>
+            </table>
+        </div>
 
-            <!-- Products Section -->
-            <div id="productsSection" class="card" style="display:none;">
-                <h2>Product Management</h2>
-                <p>Manage your product inventory here.</p>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Price</th>
-                            <th>Stock</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="productsTableBody">
-                        <!-- Products will be dynamically populated here -->
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Orders Section -->
-            <div id="ordersSection" class="card" style="display:none;">
-                <h2>Order Management</h2>
-                <p>View and process customer orders.</p>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Order ID</th>
-                            <th>Customer</th>
-                            <th>Total</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="ordersTableBody">
-                        <!-- Orders will be dynamically populated here -->
-                    </tbody>
-                </table>
-            </div>
+        <!-- Orders Section -->
+        <div id="ordersSection" class="card" style="display:none;">
+            <h2>Order Management</h2>
+            <p>View and process customer orders.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersTableBody">
+                    <!-- Orders will be dynamically populated here -->
+                </tbody>
+            </table>
         </div>
     </div>
 

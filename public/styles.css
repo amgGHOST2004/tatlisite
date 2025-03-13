@@ -1,27 +1,28 @@
+/* General Styles */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100vh;
+    color: #333;
 }
 
+/* Navbar Styles */
 .navbar {
     width: 100%;
     background-color: #007bff;
     color: #fff;
-    padding: 10px 20px;
+    padding: 15px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .navbar h1 {
     margin: 0;
+    font-size: 24px;
+    font-weight: 600;
 }
 
 .navbar .profile-menu {
@@ -30,12 +31,15 @@ body {
 }
 
 .navbar .profile-menu button {
-    background-color: #007bff;
+    background-color: transparent;
     border: none;
     color: #fff;
     padding: 10px;
     cursor: pointer;
     font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .navbar .profile-menu-content {
@@ -46,6 +50,8 @@ body {
     min-width: 160px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     z-index: 1;
+    border-radius: 4px;
+    overflow: hidden;
 }
 
 .navbar .profile-menu-content a {
@@ -53,6 +59,7 @@ body {
     padding: 12px 16px;
     text-decoration: none;
     display: block;
+    transition: background-color 0.3s ease;
 }
 
 .navbar .profile-menu-content a:hover {
@@ -63,108 +70,193 @@ body {
     display: block;
 }
 
-.nav-links a {
-    color: #fff;
-    padding: 10px;
-    text-decoration: none;
-    font-size: 16px;
-}
-
-.nav-links a:hover {
-    background-color: #0056b3;
-    border-radius: 4px;
-}
-
+/* Container Styles */
 .container {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
 
-h1, h2 {
-    color: #333;
+/* Sidebar Styles */
+.sidebar {
+    width: 250px;
+    background-color: #2c3e50;
+    color: #fff;
+    padding: 20px;
+    height: 100vh;
+    position: fixed;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
 }
 
-label {
-    display: block;
-    margin: 10px 0 5px;
-    color: #555;
+.sidebar h2 {
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: 600;
 }
 
-input[type="text"],
-input[type="password"],
-input[type="email"] {
-    width: calc(100% - 20px); /* Adjust width to account for padding */
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 15px;
+}
+
+.sidebar ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
     border-radius: 4px;
-    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    transition: background-color 0.3s ease;
 }
 
-button {
+.sidebar ul li a:hover {
+    background-color: #34495e;
+}
+
+/* Main Content Styles */
+.main-content {
+    margin-left: 270px; /* Offset for sidebar */
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card h2 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+.card p {
+    font-size: 16px;
+    color: #666;
+}
+
+/* Table Styles */
+table {
     width: 100%;
-    padding: 10px;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th,
+table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Button Styles */
+button {
+    padding: 10px 20px;
     background-color: #007bff;
     border: none;
     border-radius: 4px;
     color: #fff;
     font-size: 16px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
     background-color: #0056b3;
 }
 
-p {
-    margin-top: 20px;
-}
-
-/* Admin specific styles */
-#addItemForm {
+/* Login Page Styles */
+.login-container {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 20px;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #007bff;
 }
 
-#addItemForm input,
-#addItemForm textarea {
-    padding: 10px;
+.login-form {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.login-form h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
     border: 1px solid #ddd;
     border-radius: 4px;
+    font-size: 16px;
 }
 
-#addItemForm button {
-    padding: 10px;
+.login-form button {
+    width: 100%;
+    padding: 12px;
     background-color: #007bff;
-    color: white;
     border: none;
     border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-#addItemForm button:hover {
+.login-form button:hover {
     background-color: #0056b3;
 }
 
-.item {
-    border: 1px solid #ddd;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 4px;
-}
-
-.item button {
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.item button:hover {
-    background-color: #c82333;
+.error-message {
+    color: #dc3545;
+    margin-top: 10px;
+    display: none;
 }
