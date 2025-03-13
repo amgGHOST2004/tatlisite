@@ -91,68 +91,54 @@
     </div>
 
     <script>
-        function isTokenExpired(token) {
-            const payloadBase64 = token.split('.')[1];
-            const decodedJson = atob(payloadBase64);
-            const decoded = JSON.parse(decodedJson);
-            const exp = decoded.exp;
-            const now = Date.now() / 1000;
-            return now > exp;
-        }
+async function fetchProtectedData() {
+    const token = localStorage.getItem('adminToken');
 
-        function checkTokenAndFetch() {
-            const token = localStorage.getItem('adminToken');
+    if (!token || isTokenExpired(token)) {
+        console.log('Token is expired or not found');
+        window.location.href = 'admin-login.html';
+        return;
+    }
 
-            if (!token || isTokenExpired(token)) {
-                console.log('Token is expired or not found');
-                window.location.href = 'admin-login.html';
-            } else {
-                fetchProtectedData();
+    try {
+        const response = await fetch('/api/admin/check-auth', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
             }
-        }
+        });
 
-        async function fetchProtectedData() {
-            const token = localStorage.getItem('adminToken');
-            try {
-                const response = await fetch('/api/admin/check-auth', {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
+        const data = await response.json();
 
-                const data = await response.json();
-                if (response.ok) {
-                    console.log('Authentication successful:', data.message);
-                    document.getElementById('welcomeMessage').textContent = `Welcome, Admin! (ID: ${data.adminId})`;
-                } else {
-                    console.error('Authentication failed:', data.message);
-                    window.location.href = 'admin-login.html';
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                window.location.href = 'admin-login.html';
-            }
-
-        }
-
-        function showSection(sectionName) {
-            const sections = ['dashboard', 'users', 'products', 'orders'];
-            sections.forEach(section => {
-                document.getElementById(`${section}Section`).style.display = 'none';
+        if (response.ok) {
+            // Check if the user is an admin in MongoDB
+            const adminCheckResponse = await fetch('/api/admin/check-admin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ adminId: data.adminId })
             });
-            document.getElementById(`${sectionName}Section`).style.display = 'block';
-            document.getElementById('sectionTitle').textContent = sectionName.charAt(0).toUpperCase() + sectionName.slice(1);
-        }
 
-        function logout() {
-            localStorage.removeItem('adminToken');
+            const adminCheckData = await adminCheckResponse.json();
+
+            if (adminCheckResponse.ok && adminCheckData.isAdmin) {
+                console.log('Authentication successful:', data.message);
+                document.getElementById('welcomeMessage').textContent = `Welcome, Admin! (ID: ${data.adminId})`;
+            } else {
+                console.error('User is not an admin:', adminCheckData.message);
+                window.location.href = 'admin-login.html';
+            }
+        } else {
+            console.error('Authentication failed:', data.message);
             window.location.href = 'admin-login.html';
         }
-
-    // At the end of your script
-    // Initial check and fetch
-    checkTokenAndFetch();
+    } catch (error) {
+        console.error('Error:', error);
+        window.location.href = 'admin-login.html';
+    }
+}
     </script>
 </body>
 </html>
