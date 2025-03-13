@@ -44,15 +44,21 @@ async function loginUser(req, res) {
       console.log('Missing fields:', { username, password }); // Log missing fields
       return res.status(400).json({ message: 'All fields are required' });
     }
+
     const user = await User.findOne({ username });
     if (!user) {
       return res.status(400).json({ message: 'Invalid username or password' });
     }
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid username or password' });
     }
+
+    // Set the user in the session
     req.session.user = user; // Create a session
+    console.log('Session created:', req.session.user); // Log the session
+
     res.status(200).json({ message: 'Login successful' });
   } catch (error) {
     console.error('Error logging in user:', error); // Log the error
@@ -63,11 +69,13 @@ async function loginUser(req, res) {
 function logoutUser(req, res) {
   req.session.destroy((err) => {
     if (err) {
+      console.error('Error destroying session:', err); // Log the error
       return res.status(500).json({ message: 'Error logging out' });
     }
     res.status(200).json({ message: 'Logout successful', redirect: '/index.html' });
   });
 }
+
 
 
 async function forgotPassword(req, res) {

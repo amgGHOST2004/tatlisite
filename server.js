@@ -1,16 +1,24 @@
 // server.js
 const express = require('express');
-const path = require('path');
+const session = require('express-session');
 const mongoose = require('mongoose');
+const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
-const userRoutes = require('./src/routes/userRoutes'); // Updated path
-const productRoutes = require('./src/routes/product'); // Import product routes
-const adminRoutes = require('./src/routes/admin'); // Import admin routes
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+// Session middleware
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || 'your-secret-key', // Use a strong secret key
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }, // 24 hours
+  })
+);
 
 // Middleware
 app.use(cors());
@@ -36,9 +44,13 @@ app.get('/', (req, res) => {
 });
 
 // Routes
-app.use('/api/admin', adminRoutes); // Admin routes
-app.use('/api/users', userRoutes); // User routes
-app.use('/api/products', productRoutes); // Product routes
+const userRoutes = require('./src/routes/userRoutes');
+const productRoutes = require('./src/routes/product');
+const adminRoutes = require('./src/routes/admin');
+
+app.use('/api/users', userRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Start the server
 app.listen(port, () => {
