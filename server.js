@@ -6,7 +6,7 @@ const cors = require('cors');
 require('dotenv').config();
 const Admin = require('./src/models/Admin');
 const jwt = require('jsonwebtoken');
-const userRoutes = require('./src/routes/users'); // Import user routes
+const userRoutes = require('./routes/userRoutes'); // Import user routes
 const productRoutes = require('./src/routes/product'); // Import product routes
 const User = require('./src/models/User');
 const Product = require('./src/models/Product');
