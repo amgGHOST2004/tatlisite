@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 
 // Define the User schema
 const userSchema = new mongoose.Schema({
-  username: { type: String, required: true },
+  username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
 });
@@ -24,9 +24,9 @@ userSchema.pre('save', async function (next) {
 
 // Static method for user registration
 userSchema.statics.registerUser = async function (username, email, password) {
-  const existingUser = await this.findOne({ email });
+  const existingUser = await this.findOne({ $or: [{ email }, { username }] });
   if (existingUser) {
-    throw new Error('Bu e-posta zaten kullanılıyor');
+    throw new Error('Bu e-posta veya kullanıcı adı zaten kullanılıyor');
   }
   const hashedPassword = await bcrypt.hash(password, 10);
   const newUser = new this({ username, email, password: hashedPassword });
@@ -34,15 +34,24 @@ userSchema.statics.registerUser = async function (username, email, password) {
 };
 
 // Static method for user login
-userSchema.statics.loginUser = async function (email, password) {
-  const user = await this.findOne({ email });
+userSchema.statics.loginUser = async function (identifier, password) {
+  // Check if the identifier is an email or username
+  const user = await this.findOne({
+    $or: [
+      { email: identifier }, // Check if identifier matches email
+      { username: identifier }, // Check if identifier matches username
+    ],
+  });
+
   if (!user) {
-    throw new Error('Geçersiz e-posta veya şifre');
+    throw new Error('Geçersiz kullanıcı adı/e-posta veya şifre');
   }
+
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    throw new Error('Geçersiz e-posta veya şifre');
+    throw new Error('Geçersiz kullanıcı adı/e-posta veya şifre');
   }
+
   return jwt.sign({ userId: user._id }, 'secretKey', { expiresIn: '1h' });
 };
 

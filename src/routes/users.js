@@ -1,3 +1,4 @@
+// users.js
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
@@ -53,8 +54,8 @@ router.post('/register', async (req, res) => {
 // ✅ Kullanıcı girişi (Login)
 router.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const token = await User.loginUser(email, password);
+    const { identifier, password } = req.body; // Expect identifier (username or email)
+    const token = await User.loginUser(identifier, password);
     res.json({ message: 'Giriş başarılı!', token });
   } catch (error) {
     res.status(400).json({ message: error.message });
