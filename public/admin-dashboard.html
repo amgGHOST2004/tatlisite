@@ -60,6 +60,13 @@
         .active {
             display: block;
         }
+        .user-card {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -93,20 +100,7 @@
         </div>
         <div id="users" class="section">
             <h1>Kayıtlı Kullanıcılar</h1>
-            <ul id="userList"></ul>
-        </div>
-        <div id="products" class="section">
-            <h1>Ürün Yönetimi</h1>
-            <form id="addProductForm">
-                <input type="text" id="productName" placeholder="Ürün Adı" required>
-                <input type="number" id="productStock" placeholder="Stok" required>
-                <button type="submit">Ürün Ekle</button>
-            </form>
-            <ul id="productList"></ul>
-        </div>
-        <div id="orders" class="section">
-            <h1>Müşteri Siparişleri</h1>
-            <ul id="orderList"></ul>
+            <div id="userList"></div>
         </div>
     </div>
     <script>
@@ -122,9 +116,10 @@
                 const userList = document.getElementById('userList');
                 userList.innerHTML = '';
                 users.forEach(user => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = `${user.username} - ${user.email}`;
-                    userList.appendChild(listItem);
+                    const userCard = document.createElement('div');
+                    userCard.className = 'user-card';
+                    userCard.innerHTML = `<strong>${user.username}</strong><br>${user.email}`;
+                    userList.appendChild(userCard);
                 });
             } catch (error) {
                 console.error('Kullanıcılar alınırken hata oluştu:', error);
