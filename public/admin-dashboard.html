@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Yönetici Paneli</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         .sidebar {
@@ -64,48 +64,48 @@
 </head>
 <body>
     <div class="sidebar">
-        <h2>Admin Panel</h2>
+        <h2>Yönetici Paneli</h2>
         <ul>
-            <li><a href="#" onclick="showSection('dashboard')">Dashboard</a></li>
-            <li><a href="#" onclick="showSection('users')">Users</a></li>
-            <li><a href="#" onclick="showSection('products')">Products</a></li>
-            <li><a href="#" onclick="showSection('orders')">Orders</a></li>
-            <li><a href="#" id="logoutLink">Logout</a></li>
+            <li><a href="#" onclick="showSection('dashboard')">Ana Sayfa</a></li>
+            <li><a href="#" onclick="showSection('users')">Kullanıcılar</a></li>
+            <li><a href="#" onclick="showSection('products')">Ürünler</a></li>
+            <li><a href="#" onclick="showSection('orders')">Siparişler</a></li>
+            <li><a href="#" id="logoutLink">Çıkış Yap</a></li>
         </ul>
     </div>
     <div class="main-content">
         <div id="dashboard" class="section active">
-            <h1>Dashboard Overview</h1>
+            <h1>Genel Bakış</h1>
             <div class="dashboard-grid">
                 <div class="card">
-                    <h3>Total Users</h3>
+                    <h3>Toplam Kullanıcı</h3>
                     <p id="totalUsers">0</p>
                 </div>
                 <div class="card">
-                    <h3>Total Products</h3>
+                    <h3>Toplam Ürün</h3>
                     <p id="totalProducts">0</p>
                 </div>
                 <div class="card">
-                    <h3>Total Orders</h3>
+                    <h3>Toplam Sipariş</h3>
                     <p id="totalOrders">0</p>
                 </div>
             </div>
         </div>
         <div id="users" class="section">
-            <h1>Registered Users</h1>
+            <h1>Kayıtlı Kullanıcılar</h1>
             <ul id="userList"></ul>
         </div>
         <div id="products" class="section">
-            <h1>Manage Products</h1>
+            <h1>Ürün Yönetimi</h1>
             <form id="addProductForm">
-                <input type="text" id="productName" placeholder="Product Name" required>
-                <input type="number" id="productStock" placeholder="Stock" required>
-                <button type="submit">Add Product</button>
+                <input type="text" id="productName" placeholder="Ürün Adı" required>
+                <input type="number" id="productStock" placeholder="Stok" required>
+                <button type="submit">Ürün Ekle</button>
             </form>
             <ul id="productList"></ul>
         </div>
         <div id="orders" class="section">
-            <h1>Customer Orders</h1>
+            <h1>Müşteri Siparişleri</h1>
             <ul id="orderList"></ul>
         </div>
     </div>
@@ -122,12 +122,12 @@
         async function fetchProducts() {
             const response = await fetch('/api/products');
             const products = await response.json();
-            document.getElementById('productList').innerHTML = products.map(product => `<li>${product.name} - Stock: ${product.stock} <button onclick="deleteProduct('${product.id}')">Delete</button></li>`).join('');
+            document.getElementById('productList').innerHTML = products.map(product => `<li>${product.name} - Stok: ${product.stock} <button onclick="deleteProduct('${product.id}')">Sil</button></li>`).join('');
         }
         async function fetchOrders() {
             const response = await fetch('/api/orders');
             const orders = await response.json();
-            document.getElementById('orderList').innerHTML = orders.map(order => `<li>Order #${order.id} - ${order.customer} - Total: ${order.total}</li>`).join('');
+            document.getElementById('orderList').innerHTML = orders.map(order => `<li>Sipariş #${order.id} - ${order.customer} - Toplam: ${order.total}</li>`).join('');
         }
         document.getElementById('addProductForm').addEventListener('submit', async function(e) {
             e.preventDefault();
