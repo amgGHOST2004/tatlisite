@@ -6,6 +6,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const app = express();
 const port = process.env.PORT || 3000;

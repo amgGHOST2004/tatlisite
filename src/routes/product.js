@@ -1,4 +1,4 @@
-// routes/Product.js
+// src/routes/product.js
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
@@ -34,6 +34,20 @@ router.get('/', async (req, res) => {
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: 'Ürünler alınırken hata oluştu.', error });
+  }
+});
+
+// ✅ Ürün silme
+router.delete('/:id', async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const deletedProduct = await Product.findByIdAndDelete(productId);
+    if (!deletedProduct) {
+      return res.status(404).json({ message: 'Ürün bulunamadı.' });
+    }
+    res.json({ message: 'Ürün başarıyla silindi.' });
+  } catch (error) {
+    res.status(500).json({ message: 'Ürün silinirken hata oluştu.', error });
   }
 });
 

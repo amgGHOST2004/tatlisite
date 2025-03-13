@@ -61,6 +61,39 @@
         .section.active {
             display: block; /* Show the active section */
         }
+        .delete-btn {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .delete-btn:hover {
+            background-color: #cc0000;
+        }
+        .add-product-form {
+            margin-bottom: 20px;
+        }
+        .add-product-form input,
+        .add-product-form button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            max-width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .add-product-form button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        .add-product-form button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -90,7 +123,7 @@
         <!-- Products Section -->
         <div id="products" class="section">
             <h1>Ürün Yönetimi</h1>
-            <form id="addProductForm" enctype="multipart/form-data">
+            <form id="addProductForm" class="add-product-form" enctype="multipart/form-data">
                 <input type="text" id="productName" name="name" placeholder="Ürün Adı" required>
                 <input type="number" id="productStock" name="stock" placeholder="Stok" required>
                 <input type="number" id="productPrice" name="price" placeholder="Fiyat (₺)" required>
@@ -107,6 +140,7 @@
         </div>
     </div>
     <script>
+        // Show the active section
         function showSection(section) {
             const sectionElement = document.getElementById(section);
             if (!sectionElement) {
@@ -119,6 +153,7 @@
             if (section === 'products') fetchProducts();
         }
 
+        // Fetch and display products
         async function fetchProducts() {
             try {
                 const response = await fetch('/api/products');
@@ -132,6 +167,7 @@
                         <img src="${product.image}" alt="${product.name}">
                         <strong>${product.name}</strong><br>
                         Fiyat: ₺${product.price} - Stok: ${product.stock}
+                        <button onclick="deleteProduct('${product._id}')" class="delete-btn">Sil</button>
                     `;
                     productList.appendChild(productCard);
                 });
@@ -140,6 +176,28 @@
             }
         }
 
+        // Delete a product
+        async function deleteProduct(productId) {
+            if (!confirm('Bu ürünü silmek istediğinizden emin misiniz?')) {
+                return; // If the user cancels, do nothing
+            }
+
+            try {
+                const response = await fetch(`/api/products/${productId}`, {
+                    method: 'DELETE',
+                });
+                if (response.ok) {
+                    alert('Ürün başarıyla silindi!');
+                    fetchProducts(); // Refresh the product list
+                } else {
+                    alert('Ürün silinirken hata oluştu.');
+                }
+            } catch (error) {
+                console.error('Ürün silme hatası:', error);
+            }
+        }
+
+        // Add a new product
         document.getElementById('addProductForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const formData = new FormData(this);
@@ -150,8 +208,8 @@
                 });
                 if (response.ok) {
                     alert('Ürün başarıyla eklendi!');
-                    fetchProducts();
-                    this.reset();
+                    fetchProducts(); // Refresh the product list
+                    this.reset(); // Clear the form
                 } else {
                     alert('Ürün eklenirken hata oluştu.');
                 }
@@ -160,6 +218,7 @@
             }
         });
 
+        // Logout functionality
         document.getElementById('logoutLink').addEventListener('click', function(e) {
             e.preventDefault();
             localStorage.removeItem('adminToken');
