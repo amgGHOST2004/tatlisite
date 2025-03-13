@@ -18,46 +18,46 @@
         <div class="login-form">
             <h2>Giriş Yap</h2>
             <form id="loginForm">
-                <input type="text" id="identifier" name="identifier" placeholder="Kullanıcı Adı veya E-posta" required>
+                <input type="text" id="username" name="username" placeholder="Kullanıcı Adı" required>
                 <input type="password" id="password" name="password" placeholder="Şifre" required>
                 <button type="submit">Giriş Yap</button>
                 <p id="errorMessage" class="error-message"></p>
-            </form>
+              </form>              
             <p>Hesabınız yok mu? <a href="register.html">Buradan kayıt olun</a>.</p>
         </div>
     </div>
-<script>
-  document.getElementById('loginForm').addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const identifier = document.getElementById('identifier').value;
-    const password = document.getElementById('password').value;
-    const errorMessage = document.getElementById('errorMessage');
-
-    if (!identifier || !password) {
-      errorMessage.innerHTML = 'Tüm alanlar zorunludur';
-      errorMessage.style.display = 'block';
-      return;
-    }
-
-    try {
-      const response = await fetch('/api/users/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ identifier, password }) // Send identifier (username or email)
-      });
-      const result = await response.json();
-      if (!response.ok) {
-        errorMessage.innerHTML = result.message;
-        errorMessage.style.display = 'block';
-      } else {
-        errorMessage.style.display = 'none';
-        window.location.href = '/home.html';
-      }
-    } catch (error) {
-      errorMessage.innerHTML = 'Bir hata oluştu. Lütfen tekrar deneyin.';
-      errorMessage.style.display = 'block';
-    }
-  });
-</script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const username = document.getElementById('username').value;
+          const password = document.getElementById('password').value;
+          const errorMessage = document.getElementById('errorMessage');
+      
+          if (!username || !password) {
+            errorMessage.innerHTML = 'Tüm alanlar zorunludur';
+            errorMessage.style.display = 'block';
+            return;
+          }
+      
+          try {
+            const response = await fetch('/api/users/login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ username, password }) // Send username and password
+            });
+            const result = await response.json();
+            if (!response.ok) {
+              errorMessage.innerHTML = result.message;
+              errorMessage.style.display = 'block';
+            } else {
+              errorMessage.style.display = 'none';
+              window.location.href = '/home.html';
+            }
+          } catch (error) {
+            errorMessage.innerHTML = 'Bir hata oluştu. Lütfen tekrar deneyin.';
+            errorMessage.style.display = 'block';
+          }
+        });
+      </script>
 </body>
 </html>

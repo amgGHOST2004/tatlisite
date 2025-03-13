@@ -62,12 +62,12 @@ router.post('/register', async (req, res) => {
 // ✅ Kullanıcı girişi (Login)
 router.post('/login', async (req, res) => {
   try {
-    const { identifier, password } = req.body;
-    if (!identifier || !password) {
+    const { username, password } = req.body; // Expect username and password
+    if (!username || !password) {
       return res.status(400).json({ message: 'Tüm alanlar zorunludur' });
     }
 
-    const token = await User.loginUser(identifier, password);
+    const token = await User.loginUser(username, password);
     res.json({ message: 'Giriş başarılı!', token });
   } catch (error) {
     res.status(400).json({ message: error.message });

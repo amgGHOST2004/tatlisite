@@ -66,29 +66,24 @@ userSchema.statics.registerUser = async function (username, email, password) {
 };
 
 // Static method for user login
-userSchema.statics.loginUser = async function (identifier, password) {
+userSchema.statics.loginUser = async function (username, password) {
   // Validate input fields
-  if (!identifier || !password) {
+  if (!username || !password) {
     throw new Error('Tüm alanlar zorunludur');
   }
 
-  // Find the user by email or username
-  const user = await this.findOne({
-    $or: [
-      { email: identifier }, // Check if identifier matches email
-      { username: identifier }, // Check if identifier matches username
-    ],
-  });
+  // Find the user by username
+  const user = await this.findOne({ username });
 
   // If user not found, throw an error
   if (!user) {
-    throw new Error('Geçersiz kullanıcı adı/e-posta veya şifre');
+    throw new Error('Geçersiz kullanıcı adı veya şifre');
   }
 
   // Compare the provided password with the hashed password
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    throw new Error('Geçersiz kullanıcı adı/e-posta veya şifre');
+    throw new Error('Geçersiz kullanıcı adı veya şifre');
   }
 
   // Generate a JWT token for the logged-in user
