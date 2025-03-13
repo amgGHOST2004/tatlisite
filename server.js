@@ -4,29 +4,21 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
-const Admin = require('./src/models/Admin'); // Ensure Admin model is imported
-const jwt = require('jsonwebtoken'); // Import jwt for token generation
-const userRoutes = require('./src/routes/users'); // Import user routes
-const User = require('./src/models/User'); // Import User model
-
-// Make sure your .env file has a JWT_SECRET defined
-if (!process.env.JWT_SECRET) {
-  console.error('JWT_SECRET is not set in the environment variables');
-  process.exit(1);
-}
+const Admin = require('./src/models/Admin');
+const jwt = require('jsonwebtoken');
+const userRoutes = require('./src/routes/users');
+const User = require('./src/models/User');
+const Product = require('./src/models/Product');
+const Order = require('./src/models/Order');
 
 const app = express();
 const port = process.env.PORT || 3000;
 const adminRoutes = require('./src/routes/admin');
 
-// Middleware
 app.use(cors());
 app.use(bodyParser.json());
 
-// Mongoose settings
 mongoose.set('strictQuery', true);
-
-// MongoDB connection
 const mongoURI = process.env.MONGODB_URI;
 mongoose
   .connect(mongoURI, {
@@ -35,52 +27,55 @@ mongoose
     serverSelectionTimeoutMS: 5000,
     socketTimeoutMS: 45000,
   })
-  .then(() => console.log('MongoDB connection successful'))
-  .catch((err) => console.error('MongoDB connection error:', err));
+  .then(() => console.log('MongoDB bağlantısı başarılı'))
+  .catch((err) => console.error('MongoDB bağlantı hatası:', err));
 
-// Register endpoint
-app.post('/api/users/register', async (req, res) => {
-  const { username, email, password } = req.body;
+app.post('/api/products', async (req, res) => {
   try {
-    const newUser = new User({ username, email, password });
-    await newUser.save();
-    res.status(201).json({ message: 'Kayıt başarılı!' });
+    const { name, stock } = req.body;
+    const newProduct = new Product({ name, stock });
+    await newProduct.save();
+    res.status(201).json({ message: 'Ürün başarıyla eklendi!' });
   } catch (error) {
-    console.error('Kayıt sırasında bir hata oluştu:', error);
-    res.status(500).json({ message: 'Kayıt sırasında bir hata oluştu.', error: error.message });
+    res.status(500).json({ message: 'Ürün eklenirken hata oluştu.', error: error.message });
   }
 });
 
-// Login endpoint
-app.post('/api/users/login', async (req, res) => {
-  const { username, password } = req.body;
+app.get('/api/products', async (req, res) => {
   try {
-    const user = await User.findOne({ username, password });
-    if (!user) {
-      return res.status(401).json({ message: 'Geçersiz kullanıcı adı veya şifre' });
-    }
-    res.status(200).json({ message: 'Giriş başarılı!' });
+    const products = await Product.find({});
+    res.json(products);
   } catch (error) {
-    console.error('Giriş sırasında bir hata oluştu:', error);
-    res.status(500).json({ message: 'Giriş sırasında bir hata oluştu.', error: error.message });
+    res.status(500).json({ message: 'Ürünler alınırken hata oluştu.', error });
   }
 });
 
-// Serve static files
+app.delete('/api/products/:id', async (req, res) => {
+  try {
+    await Product.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Ürün silindi' });
+  } catch (error) {
+    res.status(500).json({ message: 'Ürün silinirken hata oluştu.', error });
+  }
+});
+
+app.get('/api/orders', async (req, res) => {
+  try {
+    const orders = await Order.find({});
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: 'Siparişler alınırken hata oluştu.', error });
+  }
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
-
-// Homepage route
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Mount admin routes
 app.use('/api/admin', adminRoutes);
-
-// Mount user routes
 app.use('/api/users', userRoutes);
 
-// Start the server
 app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+  console.log(`Sunucu ${port} numaralı portta çalışıyor`);
 });
