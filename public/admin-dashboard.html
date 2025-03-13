@@ -43,24 +43,7 @@
             margin-left: 270px;
             padding: 20px;
         }
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-        .dashboard-grid, .section {
-            display: none;
-        }
-        .active {
-            display: block;
-        }
-        .user-card {
+        .product-card {
             background: #f8f9fa;
             padding: 15px;
             margin: 10px 0;
@@ -68,23 +51,9 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             position: relative;
         }
-        .user-actions {
-            margin-top: 10px;
-        }
-        .user-actions button {
-            margin-right: 5px;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .edit-btn {
-            background-color: #ffc107;
-            color: black;
-        }
-        .delete-btn {
-            background-color: #dc3545;
-            color: white;
+        .product-card img {
+            max-width: 100px;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -100,73 +69,63 @@
         </ul>
     </div>
     <div class="main-content">
-        <div id="dashboard" class="section active">
-            <h1>Genel Bakış</h1>
-            <div class="dashboard-grid">
-                <div class="card">
-                    <h3>Toplam Kullanıcı</h3>
-                    <p id="totalUsers">0</p>
-                </div>
-                <div class="card">
-                    <h3>Toplam Ürün</h3>
-                    <p id="totalProducts">0</p>
-                </div>
-                <div class="card">
-                    <h3>Toplam Sipariş</h3>
-                    <p id="totalOrders">0</p>
-                </div>
-            </div>
-        </div>
-        <div id="users" class="section">
-            <h1>Kayıtlı Kullanıcılar</h1>
-            <div id="userList"></div>
+        <div id="products" class="section">
+            <h1>Ürün Yönetimi</h1>
+            <form id="addProductForm" enctype="multipart/form-data">
+                <input type="text" id="productName" name="name" placeholder="Ürün Adı" required>
+                <input type="number" id="productStock" name="stock" placeholder="Stok" required>
+                <input type="number" id="productPrice" name="price" placeholder="Fiyat (₺)" required>
+                <input type="file" id="productImage" name="image" accept="image/*" required>
+                <button type="submit">Ürün Ekle</button>
+            </form>
+            <div id="productList"></div>
         </div>
     </div>
     <script>
         function showSection(section) {
             document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
             document.getElementById(section).classList.add('active');
-            if (section === 'users') fetchUsers();
+            if (section === 'products') fetchProducts();
         }
-        async function fetchUsers() {
+        async function fetchProducts() {
             try {
-                const response = await fetch('/api/users');
-                const users = await response.json();
-                const userList = document.getElementById('userList');
-                userList.innerHTML = '';
-                users.forEach(user => {
-                    const userCard = document.createElement('div');
-                    userCard.className = 'user-card';
-                    userCard.innerHTML = `
-                        <strong>${user.username}</strong><br>${user.email}
-                        <div class="user-actions">
-                            <button class="edit-btn" onclick="editUser('${user._id}', '${user.username}', '${user.email}')">Düzenle</button>
-                            <button class="delete-btn" onclick="deleteUser('${user._id}')">Sil</button>
-                        </div>
+                const response = await fetch('/api/products');
+                const products = await response.json();
+                const productList = document.getElementById('productList');
+                productList.innerHTML = '';
+                products.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card';
+                    productCard.innerHTML = `
+                        <img src="${product.image}" alt="${product.name}">
+                        <strong>${product.name}</strong><br>
+                        Fiyat: ₺${product.price} - Stok: ${product.stock}
                     `;
-                    userList.appendChild(userCard);
+                    productList.appendChild(productCard);
                 });
             } catch (error) {
-                console.error('Kullanıcılar alınırken hata oluştu:', error);
+                console.error('Ürünler alınırken hata oluştu:', error);
             }
         }
-        async function deleteUser(userId) {
-            if (confirm('Bu kullanıcıyı silmek istediğinize emin misiniz?')) {
-                await fetch(`/api/users/${userId}`, { method: 'DELETE' });
-                fetchUsers();
+        document.getElementById('addProductForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            try {
+                const response = await fetch('/api/products', {
+                    method: 'POST',
+                    body: formData
+                });
+                if (response.ok) {
+                    alert('Ürün başarıyla eklendi!');
+                    fetchProducts();
+                    this.reset();
+                } else {
+                    alert('Ürün eklenirken hata oluştu.');
+                }
+            } catch (error) {
+                console.error('Ürün ekleme hatası:', error);
             }
-        }
-        function editUser(userId, username, email) {
-            const newUsername = prompt('Yeni Kullanıcı Adı:', username);
-            const newEmail = prompt('Yeni E-posta:', email);
-            if (newUsername && newEmail) {
-                fetch(`/api/users/${userId}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username: newUsername, email: newEmail })
-                }).then(() => fetchUsers());
-            }
-        }
+        });
         document.getElementById('logoutLink').addEventListener('click', function(e) {
             e.preventDefault();
             localStorage.removeItem('adminToken');
