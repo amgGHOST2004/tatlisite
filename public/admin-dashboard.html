@@ -113,32 +113,22 @@
         function showSection(section) {
             document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
             document.getElementById(section).classList.add('active');
+            if (section === 'users') fetchUsers();
         }
         async function fetchUsers() {
-            const response = await fetch('/api/users');
-            const users = await response.json();
-            document.getElementById('userList').innerHTML = users.map(user => `<li>${user.username} - ${user.email}</li>`).join('');
-        }
-        async function fetchProducts() {
-            const response = await fetch('/api/products');
-            const products = await response.json();
-            document.getElementById('productList').innerHTML = products.map(product => `<li>${product.name} - Stok: ${product.stock} <button onclick="deleteProduct('${product.id}')">Sil</button></li>`).join('');
-        }
-        async function fetchOrders() {
-            const response = await fetch('/api/orders');
-            const orders = await response.json();
-            document.getElementById('orderList').innerHTML = orders.map(order => `<li>Sipariş #${order.id} - ${order.customer} - Toplam: ${order.total}</li>`).join('');
-        }
-        document.getElementById('addProductForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const name = document.getElementById('productName').value;
-            const stock = document.getElementById('productStock').value;
-            await fetch('/api/products', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, stock }) });
-            fetchProducts();
-        });
-        async function deleteProduct(id) {
-            await fetch(`/api/products/${id}`, { method: 'DELETE' });
-            fetchProducts();
+            try {
+                const response = await fetch('/api/users');
+                const users = await response.json();
+                const userList = document.getElementById('userList');
+                userList.innerHTML = '';
+                users.forEach(user => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${user.username} - ${user.email}`;
+                    userList.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error('Kullanıcılar alınırken hata oluştu:', error);
+            }
         }
         document.getElementById('logoutLink').addEventListener('click', function(e) {
             e.preventDefault();
