@@ -5,75 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        .container {
-            display: flex;
-            min-height: 100vh;
-        }
-        .sidebar {
-            width: 200px;
-            background-color: #333;
-            color: white;
-            padding: 20px;
-        }
-        .sidebar h2 {
-            margin-bottom: 20px;
-        }
-        .sidebar ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        .sidebar ul li {
-            margin-bottom: 10px;
-        }
-        .sidebar ul li a {
-            color: white;
-            text-decoration: none;
-            display: block;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        .sidebar ul li a:hover {
-            background-color: #555;
-        }
-        .main-content {
-            flex-grow: 1;
-            padding: 20px;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .card {
-            background-color: white;
-            border-radius: 5px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
+        /* Add your existing styles here */
     </style>
 </head>
 <body>
@@ -181,6 +113,11 @@
             });
             document.getElementById(`${sectionName}Section`).style.display = 'block';
             document.getElementById('sectionTitle').textContent = sectionName.charAt(0).toUpperCase() + sectionName.slice(1);
+
+            // Fetch users when the Users section is shown
+            if (sectionName === 'users') {
+                fetchUsers();
+            }
         }
 
         // Function to handle logout
@@ -189,67 +126,44 @@
             window.location.href = 'admin-login.html';
         }
 
-        // Function to fetch and display data (mock data for now)
-        function fetchData() {
-            // Mock data for demonstration
-            const users = [
-                { id: 1, username: 'user1', email: 'user1@example.com' },
-                { id: 2, username: 'user2', email: 'user2@example.com' }
-            ];
+        // Function to fetch users from the backend
+        async function fetchUsers() {
+            try {
+                const response = await fetch('/api/users/users', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    }
+                });
 
-            const products = [
-                { id: 1, name: 'Product 1', price: 10.99, stock: 100 },
-                { id: 2, name: 'Product 2', price: 20.99, stock: 50 }
-            ];
+                if (!response.ok) {
+                    throw new Error('Failed to fetch users');
+                }
 
-            const orders = [
-                { id: 1, customer: 'Customer 1', total: 50.99, status: 'Pending' },
-                { id: 2, customer: 'Customer 2', total: 100.99, status: 'Shipped' }
-            ];
+                const users = await response.json();
 
-            // Populate Users Table
-            const usersTableBody = document.getElementById('usersTableBody');
-            usersTableBody.innerHTML = users.map(user => `
-                <tr>
-                    <td>${user.id}</td>
-                    <td>${user.username}</td>
-                    <td>${user.email}</td>
-                    <td><button>Edit</button> <button>Delete</button></td>
-                </tr>
-            `).join('');
+                // Populate the Users table
+                const usersTableBody = document.getElementById('usersTableBody');
+                usersTableBody.innerHTML = users.map(user => `
+                    <tr>
+                        <td>${user._id}</td>
+                        <td>${user.username}</td>
+                        <td>${user.email}</td>
+                        <td><button>Edit</button> <button>Delete</button></td>
+                    </tr>
+                `).join('');
 
-            // Populate Products Table
-            const productsTableBody = document.getElementById('productsTableBody');
-            productsTableBody.innerHTML = products.map(product => `
-                <tr>
-                    <td>${product.id}</td>
-                    <td>${product.name}</td>
-                    <td>$${product.price.toFixed(2)}</td>
-                    <td>${product.stock}</td>
-                    <td><button>Edit</button> <button>Delete</button></td>
-                </tr>
-            `).join('');
-
-            // Populate Orders Table
-            const ordersTableBody = document.getElementById('ordersTableBody');
-            ordersTableBody.innerHTML = orders.map(order => `
-                <tr>
-                    <td>${order.id}</td>
-                    <td>${order.customer}</td>
-                    <td>$${order.total.toFixed(2)}</td>
-                    <td>${order.status}</td>
-                    <td><button>Process</button></td>
-                </tr>
-            `).join('');
-
-            // Update Quick Stats
-            document.getElementById('totalUsers').textContent = users.length;
-            document.getElementById('totalProducts').textContent = products.length;
-            document.getElementById('totalOrders').textContent = orders.length;
+                // Update the total users count
+                document.getElementById('totalUsers').textContent = users.length;
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
         }
 
-        // Fetch data when the page loads
-        fetchData();
+        // Fetch users when the page loads (if on the Users section)
+        if (window.location.hash === '#users') {
+            fetchUsers();
+        }
     </script>
 </body>
 </html>

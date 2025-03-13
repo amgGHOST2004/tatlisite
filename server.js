@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
@@ -7,6 +6,7 @@ const cors = require('cors');
 require('dotenv').config();
 const Admin = require('./src/models/Admin'); // Ensure Admin model is imported
 const jwt = require('jsonwebtoken'); // Import jwt for token generation
+const userRoutes = require('./src/routes/users'); // Import user routes
 
 // Make sure your .env file has a JWT_SECRET defined
 if (!process.env.JWT_SECRET) {
@@ -86,39 +86,8 @@ app.get('/', (req, res) => {
 // Mount admin routes
 app.use('/api/admin', adminRoutes);
 
-// Step 5: Test route for admin login
-app.get('/api/admin/test-login', async (req, res) => {
-  try {
-    // Simulate a login request
-    const testAdmin = {
-      username: 'admin',
-      password: 'Efeyim123!',
-    };
-
-    // Find the admin in the `admins` collection
-    const admin = await Admin.findOne({ username: testAdmin.username });
-    if (!admin) {
-      return res.status(400).json({ message: 'Test admin not found' });
-    }
-
-    // Validate password (direct comparison)
-    if (testAdmin.password !== admin.password) {
-      return res.status(400).json({ message: 'Invalid test credentials' });
-    }
-
-    // Create and sign a token
-    const token = jwt.sign(
-      { id: admin._id },
-      process.env.JWT_SECRET,
-      { expiresIn: '1h' }
-    );
-
-    res.json({ message: 'Test login successful', token, adminId: admin._id });
-  } catch (error) {
-    console.error('Test login error:', error);
-    res.status(500).json({ message: 'Test login failed', error: error.message });
-  }
-});
+// Mount user routes
+app.use('/api/users', userRoutes);
 
 // Start the server
 app.listen(port, () => {
