@@ -4,7 +4,6 @@ const User = require('../models/User'); // Import the User model
 
 // API endpoint to fetch users
 router.get('/', async (req, res) => {
-
   try {
     const users = await User.find({});
     res.json(users);
