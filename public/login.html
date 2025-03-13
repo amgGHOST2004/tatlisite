@@ -32,6 +32,13 @@
             const identifier = document.getElementById('identifier').value;
             const password = document.getElementById('password').value;
             const errorMessage = document.getElementById('errorMessage');
+
+            if (!identifier || !password) {
+                errorMessage.innerHTML = 'Tüm alanlar zorunludur';
+                errorMessage.style.display = 'block';
+                return;
+            }
+
             try {
                 const response = await fetch('/api/users/login', {
                     method: 'POST',

@@ -19,6 +19,10 @@ router.get('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { username, email } = req.body;
+    if (!username || !email) {
+      return res.status(400).json({ message: 'Tüm alanlar zorunludur' });
+    }
+
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
       { username, email },
@@ -44,6 +48,10 @@ router.delete('/:id', async (req, res) => {
 router.post('/register', async (req, res) => {
   try {
     const { username, email, password } = req.body;
+    if (!username || !email || !password) {
+      return res.status(400).json({ message: 'Tüm alanlar zorunludur' });
+    }
+
     const token = await User.registerUser(username, email, password);
     res.status(201).json({ message: 'Kullanıcı başarıyla kaydedildi!', token });
   } catch (error) {
@@ -54,7 +62,11 @@ router.post('/register', async (req, res) => {
 // ✅ Kullanıcı girişi (Login)
 router.post('/login', async (req, res) => {
   try {
-    const { identifier, password } = req.body; // Expect identifier (username or email)
+    const { identifier, password } = req.body;
+    if (!identifier || !password) {
+      return res.status(400).json({ message: 'Tüm alanlar zorunludur' });
+    }
+
     const token = await User.loginUser(identifier, password);
     res.json({ message: 'Giriş başarılı!', token });
   } catch (error) {

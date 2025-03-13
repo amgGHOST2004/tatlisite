@@ -24,10 +24,15 @@ userSchema.pre('save', async function (next) {
 
 // Static method for user registration
 userSchema.statics.registerUser = async function (username, email, password) {
+  if (!username || !email || !password) {
+    throw new Error('Tüm alanlar zorunludur');
+  }
+
   const existingUser = await this.findOne({ $or: [{ email }, { username }] });
   if (existingUser) {
     throw new Error('Bu e-posta veya kullanıcı adı zaten kullanılıyor');
   }
+
   const hashedPassword = await bcrypt.hash(password, 10);
   const newUser = new this({ username, email, password: hashedPassword });
   return newUser.save();
@@ -35,6 +40,10 @@ userSchema.statics.registerUser = async function (username, email, password) {
 
 // Static method for user login
 userSchema.statics.loginUser = async function (identifier, password) {
+  if (!identifier || !password) {
+    throw new Error('Tüm alanlar zorunludur');
+  }
+
   // Check if the identifier is an email or username
   const user = await this.findOne({
     $or: [
