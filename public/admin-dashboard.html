@@ -66,6 +66,25 @@
             margin: 10px 0;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .user-actions {
+            margin-top: 10px;
+        }
+        .user-actions button {
+            margin-right: 5px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .edit-btn {
+            background-color: #ffc107;
+            color: black;
+        }
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
         }
     </style>
 </head>
@@ -118,11 +137,34 @@
                 users.forEach(user => {
                     const userCard = document.createElement('div');
                     userCard.className = 'user-card';
-                    userCard.innerHTML = `<strong>${user.username}</strong><br>${user.email}`;
+                    userCard.innerHTML = `
+                        <strong>${user.username}</strong><br>${user.email}
+                        <div class="user-actions">
+                            <button class="edit-btn" onclick="editUser('${user._id}', '${user.username}', '${user.email}')">Düzenle</button>
+                            <button class="delete-btn" onclick="deleteUser('${user._id}')">Sil</button>
+                        </div>
+                    `;
                     userList.appendChild(userCard);
                 });
             } catch (error) {
                 console.error('Kullanıcılar alınırken hata oluştu:', error);
+            }
+        }
+        async function deleteUser(userId) {
+            if (confirm('Bu kullanıcıyı silmek istediğinize emin misiniz?')) {
+                await fetch(`/api/users/${userId}`, { method: 'DELETE' });
+                fetchUsers();
+            }
+        }
+        function editUser(userId, username, email) {
+            const newUsername = prompt('Yeni Kullanıcı Adı:', username);
+            const newEmail = prompt('Yeni E-posta:', email);
+            if (newUsername && newEmail) {
+                fetch(`/api/users/${userId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: newUsername, email: newEmail })
+                }).then(() => fetchUsers());
             }
         }
         document.getElementById('logoutLink').addEventListener('click', function(e) {
