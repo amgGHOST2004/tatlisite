@@ -46,5 +46,6 @@ userSchema.statics.loginUser = async function (email, password) {
   return jwt.sign({ userId: user._id }, 'secretKey', { expiresIn: '1h' });
 };
 
-// Export the User model
-module.exports = mongoose.model('User', userSchema, 'users');
+// Export the User model (check if it already exists)
+const User = mongoose.models.User || mongoose.model('User', userSchema, 'users');
+module.exports = User;

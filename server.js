@@ -1,20 +1,16 @@
+// server.js
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
-const Admin = require('./src/models/Admin');
-const jwt = require('jsonwebtoken');
 const userRoutes = require('./src/routes/userRoutes'); // Updated path
 const productRoutes = require('./src/routes/product'); // Import product routes
-const User = require('./src/models/User');
-const Product = require('./src/models/Product');
-const Order = require('./src/models/Order');
+const adminRoutes = require('./src/routes/admin'); // Import admin routes
 
 const app = express();
 const port = process.env.PORT || 3000;
-const adminRoutes = require('./src/routes/admin');
 
 // Middleware
 app.use(cors());
