@@ -54,11 +54,11 @@
             transform: translateY(-5px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+        .dashboard-grid, .section {
+            display: none;
+        }
+        .active {
+            display: block;
         }
     </style>
 </head>
@@ -74,23 +74,72 @@
         </ul>
     </div>
     <div class="main-content">
-        <h1>Dashboard Overview</h1>
-        <div class="dashboard-grid">
-            <div class="card">
-                <h3>Total Users</h3>
-                <p id="totalUsers">0</p>
+        <div id="dashboard" class="section active">
+            <h1>Dashboard Overview</h1>
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3>Total Users</h3>
+                    <p id="totalUsers">0</p>
+                </div>
+                <div class="card">
+                    <h3>Total Products</h3>
+                    <p id="totalProducts">0</p>
+                </div>
+                <div class="card">
+                    <h3>Total Orders</h3>
+                    <p id="totalOrders">0</p>
+                </div>
             </div>
-            <div class="card">
-                <h3>Total Products</h3>
-                <p id="totalProducts">0</p>
-            </div>
-            <div class="card">
-                <h3>Total Orders</h3>
-                <p id="totalOrders">0</p>
-            </div>
+        </div>
+        <div id="users" class="section">
+            <h1>Registered Users</h1>
+            <ul id="userList"></ul>
+        </div>
+        <div id="products" class="section">
+            <h1>Manage Products</h1>
+            <form id="addProductForm">
+                <input type="text" id="productName" placeholder="Product Name" required>
+                <input type="number" id="productStock" placeholder="Stock" required>
+                <button type="submit">Add Product</button>
+            </form>
+            <ul id="productList"></ul>
+        </div>
+        <div id="orders" class="section">
+            <h1>Customer Orders</h1>
+            <ul id="orderList"></ul>
         </div>
     </div>
     <script>
+        function showSection(section) {
+            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(section).classList.add('active');
+        }
+        async function fetchUsers() {
+            const response = await fetch('/api/users');
+            const users = await response.json();
+            document.getElementById('userList').innerHTML = users.map(user => `<li>${user.username} - ${user.email}</li>`).join('');
+        }
+        async function fetchProducts() {
+            const response = await fetch('/api/products');
+            const products = await response.json();
+            document.getElementById('productList').innerHTML = products.map(product => `<li>${product.name} - Stock: ${product.stock} <button onclick="deleteProduct('${product.id}')">Delete</button></li>`).join('');
+        }
+        async function fetchOrders() {
+            const response = await fetch('/api/orders');
+            const orders = await response.json();
+            document.getElementById('orderList').innerHTML = orders.map(order => `<li>Order #${order.id} - ${order.customer} - Total: ${order.total}</li>`).join('');
+        }
+        document.getElementById('addProductForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const name = document.getElementById('productName').value;
+            const stock = document.getElementById('productStock').value;
+            await fetch('/api/products', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, stock }) });
+            fetchProducts();
+        });
+        async function deleteProduct(id) {
+            await fetch(`/api/products/${id}`, { method: 'DELETE' });
+            fetchProducts();
+        }
         document.getElementById('logoutLink').addEventListener('click', function(e) {
             e.preventDefault();
             localStorage.removeItem('adminToken');
