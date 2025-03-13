@@ -1,4 +1,4 @@
-/* General Styles */
+/* Genel Stil Ayarları */
 body {
     font-family: 'Poppins', sans-serif;
     background-color: #f8f9fa;
@@ -7,7 +7,7 @@ body {
     color: #333;
 }
 
-/* Navbar Styles */
+/* Navbar Stili */
 .navbar {
     width: 100%;
     background-color: #007bff;
@@ -25,21 +25,16 @@ body {
     font-weight: 600;
 }
 
-.navbar .profile-menu {
-    position: relative;
-    display: inline-block;
+.navbar .nav-links a,
+.navbar .profile-menu a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 16px;
 }
 
-.navbar .profile-menu button {
-    background-color: transparent;
-    border: none;
-    color: #fff;
-    padding: 10px;
-    cursor: pointer;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+.navbar .profile-menu {
+    position: relative;
 }
 
 .navbar .profile-menu-content {
@@ -55,10 +50,10 @@ body {
 }
 
 .navbar .profile-menu-content a {
+    display: block;
     color: #333;
     padding: 12px 16px;
     text-decoration: none;
-    display: block;
     transition: background-color 0.3s ease;
 }
 
@@ -70,125 +65,17 @@ body {
     display: block;
 }
 
-/* Container Styles */
+/* Genel Konteyner Stilleri */
 .container {
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 20px auto;
     padding: 20px;
-}
-
-/* Sidebar Styles */
-.sidebar {
-    width: 250px;
-    background-color: #2c3e50;
-    color: #fff;
-    padding: 20px;
-    height: 100vh;
-    position: fixed;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.sidebar h2 {
-    margin-bottom: 20px;
-    font-size: 22px;
-    font-weight: 600;
-}
-
-.sidebar ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.sidebar ul li {
-    margin-bottom: 15px;
-}
-
-.sidebar ul li a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-}
-
-.sidebar ul li a:hover {
-    background-color: #34495e;
-}
-
-/* Main Content Styles */
-.main-content {
-    margin-left: 270px; /* Offset for sidebar */
-    padding: 20px;
-}
-
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.header h1 {
-    font-size: 28px;
-    font-weight: 600;
-    color: #2c3e50;
-}
-
-.card {
-    background-color: #fff;
+    background: #fff;
     border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-}
-
-.card h2 {
-    font-size: 22px;
-    font-weight: 600;
-    margin-bottom: 15px;
-    color: #2c3e50;
-}
-
-.card p {
-    font-size: 16px;
-    color: #666;
-}
-
-/* Table Styles */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-table th,
-table td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-table th {
-    background-color: #f8f9fa;
-    font-weight: 600;
-    color: #2c3e50;
-}
-
-table tr:hover {
-    background-color: #f1f1f1;
-}
-
-/* Button Styles */
+/* Buton Stilleri */
 button {
     padding: 10px 20px;
     background-color: #007bff;
@@ -204,7 +91,7 @@ button:hover {
     background-color: #0056b3;
 }
 
-/* Login Page Styles */
+/* Login ve Form Stilleri */
 .login-container {
     display: flex;
     justify-content: center;
@@ -223,13 +110,6 @@ button:hover {
     text-align: center;
 }
 
-.login-form h1 {
-    font-size: 28px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    color: #2c3e50;
-}
-
 .login-form input {
     width: 100%;
     padding: 12px;
@@ -237,26 +117,4 @@ button:hover {
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 16px;
-}
-
-.login-form button {
-    width: 100%;
-    padding: 12px;
-    background-color: #007bff;
-    border: none;
-    border-radius: 4px;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.login-form button:hover {
-    background-color: #0056b3;
-}
-
-.error-message {
-    color: #dc3545;
-    margin-top: 10px;
-    display: none;
 }
