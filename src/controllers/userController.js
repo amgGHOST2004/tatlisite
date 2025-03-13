@@ -22,7 +22,7 @@ async function registerUser(req, res) {
     if (username.length < 5) {
       return res.status(400).json({ message: 'Username must be at least 5 characters long' });
     }
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&/-+,.])[A-Za-z\d@$!%*?&/-+,.]{8,}$/;
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&\-+,.])[A-Za-z\d@$!%*?&\-+,.]{8,}$/;
     if (!passwordRegex.test(password)) {
       return res.status(400).json({ message: 'Password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character' });
     }
