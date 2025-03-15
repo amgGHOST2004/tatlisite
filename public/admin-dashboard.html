@@ -140,6 +140,40 @@
         </div>
     </div>
     <script>
+        // Check for admin token
+        const adminToken = localStorage.getItem('adminToken');
+        if (!adminToken) {
+            window.location.href = '/admin-login.html';
+        }
+        
+        document.getElementById('logoutLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('adminToken');
+            window.location.href = '/admin-login.html';
+        });
+
+        // Use the token for authenticated requests
+        async function fetchAdminData() {
+            try {
+                const response = await fetch('/api/admin/data', {
+                    headers: {
+                        'Authorization': `Bearer ${adminToken}`
+                    }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    // Process and display admin data
+                } else {
+                    throw new Error('Failed to fetch admin data');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to load admin data. Please log in again.');
+                window.location.href = '/admin-login.html';
+            }
+        }
+
+        fetchAdminData();
         // Show the active section
         function showSection(section) {
             const sectionElement = document.getElementById(section);
@@ -152,7 +186,7 @@
 
             if (section === 'products') fetchProducts();
         }
-
+    </script>
         // Fetch and display products
         async function fetchProducts() {
             try {
@@ -221,12 +255,17 @@
         // Logout functionality
         document.getElementById('logoutLink').addEventListener('click', function(e) {
             e.preventDefault();
-            localStorage.removeItem('adminToken');
-            window.location.href = 'admin-login.html';
+            logout();
         });
 
+        // Logout function
+        function logout() {
+            localStorage.removeItem('adminToken');
+            window.location.href = '/admin-login.html';
+        }
         // Show the dashboard section by default when the page loads
         showSection('dashboard');
     </script>
+
 </body>
 </html>

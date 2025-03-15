@@ -35,7 +35,7 @@
                 const data = await response.json();
                 if (response.ok) {
                     localStorage.setItem('adminToken', data.token);
-                    window.location.href = 'admin-dashboard.html';
+                    window.location.href = '/admin-dashboard';
                 } else {
                     document.getElementById('errorMessage').textContent = data.message || 'Login failed';
                     document.getElementById('errorMessage').style.display = 'block';
