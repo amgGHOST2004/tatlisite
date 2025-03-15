@@ -5,22 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yönetici Paneli</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        /* CSS styles here */
-    </style>
 </head>
 <body>
-    <div class="sidebar">
-        <h2>Yönetici Paneli</h2>
-        <ul>
-            <li><a href="#" onclick="showSection('dashboard')">Ana Sayfa</a></li>
-            <li><a href="#" onclick="showSection('users')">Kullanıcılar</a></li>
-            <li><a href="#" onclick="showSection('products')">Ürünler</a></li>
-            <li><a href="#" onclick="showSection('orders')">Siparişler</a></li>
-            <li><a href="#" id="logoutLink">Çıkış Yap</a></li>
-        </ul>
+    <!-- Navbar -->
+    <div class="navbar">
+        <h1>Yönetici Paneli</h1>
+        <div class="profile-menu">
+            <a href="#" id="logoutLink">Çıkış Yap</a>
+        </div>
     </div>
-    <div class="main-content">
+
+    <!-- Main Content -->
+    <div class="container">
         <!-- Dashboard Section -->
         <div id="dashboard" class="section">
             <h1>Ana Sayfa</h1>
@@ -52,6 +48,7 @@
             <p>Sipariş yönetimi ile ilgili içerik burada yer alacak.</p>
         </div>
     </div>
+
     <script>
         // Check for admin token
         const adminToken = localStorage.getItem('adminToken');
