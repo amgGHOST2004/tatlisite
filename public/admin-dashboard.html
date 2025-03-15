@@ -7,18 +7,22 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Navbar -->
-    <div class="navbar">
-        <h1>Yönetici Paneli</h1>
-        <div class="profile-menu">
-            <a href="#" id="logoutLink">Çıkış Yap</a>
-        </div>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Yönetici Paneli</h2>
+        <ul>
+            <li><a href="#" onclick="showSection('dashboard')">Ana Sayfa</a></li>
+            <li><a href="#" onclick="showSection('users')">Kullanıcılar</a></li>
+            <li><a href="#" onclick="showSection('products')">Ürünler</a></li>
+            <li><a href="#" onclick="showSection('orders')">Siparişler</a></li>
+            <li><a href="#" id="logoutLink">Çıkış Yap</a></li>
+        </ul>
     </div>
 
     <!-- Main Content -->
-    <div class="container">
+    <div class="main-content">
         <!-- Dashboard Section -->
-        <div id="dashboard" class="section">
+        <div id="dashboard" class="section active">
             <h1>Ana Sayfa</h1>
             <p>Hoş geldiniz! Bu yönetici paneli ana sayfasıdır.</p>
         </div>
@@ -56,6 +60,7 @@
             window.location.href = '/admin-login.html';
         }
 
+        // Logout functionality
         document.getElementById('logoutLink').addEventListener('click', (e) => {
             e.preventDefault();
             localStorage.removeItem('adminToken');
