@@ -1,5 +1,5 @@
 const express = require('express');
-const Product = require('../models/product.js');
+const Product = require('../models/product'); // Küçük harf kullanın
 const router = express.Router();
 
 // Tüm ürünleri getir
