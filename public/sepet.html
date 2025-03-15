@@ -12,7 +12,7 @@
         <div class="profile-menu">
             <button>Profile</button>
             <div class="profile-menu-content">
-                <a href="logout.html">Log Out</a>
+                <a href="#" id="logoutLink">Log Out</a>
                 <a href="sepet.html">Sepet</a>
                 <a href="addresses.html">Addresses</a>
                 <a href="account-settings.html">Account Settings</a>
@@ -21,8 +21,63 @@
     </div>
     <div class="container">
         <h2>Sepet</h2>
-        <p>Your shopping cart is empty.</p>
-        <a href="index.html" class="button">Go to Home</a>
+        <div id="cartItems"></div>
+        <div id="paymentOptions">
+            <h3>Ödeme Seçenekleri</h3>
+            <form id="paymentForm">
+                <label>
+                    <input type="radio" name="paymentMethod" value="online" required> Online Ödeme
+                </label>
+                <label>
+                    <input type="radio" name="paymentMethod" value="cod"> Kapıda Ödeme
+                </label>
+                <button type="submit">Ödemeyi Tamamla</button>
+            </form>
+        </div>
+        <a href="index.html" class="button">Alışverişe Devam Et</a>
     </div>
+    <script>
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartItems = document.getElementById('cartItems');
+
+        function displayCartItems() {
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p>Sepetiniz boş.</p>';
+                return;
+            }
+
+            cartItems.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <img src="${item.image}" alt="${item.name}" width="100">
+                    <h3>${item.name}</h3>
+                    <p>Fiyat: ${item.price} TL</p>
+                    <p>Adet: ${item.quantity}</p>
+                    <p>Toplam: ${item.price * item.quantity} TL</p>
+                    <button onclick="removeFromCart('${item.id}')">Kaldır</button>
+                </div>
+            `).join('');
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCartItems();
+        }
+
+        document.getElementById('paymentForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            if (paymentMethod === 'online') {
+                alert('Online ödeme işlemi tamamlandı!');
+            } else {
+                alert('Kapıda ödeme seçildi. Siparişiniz hazırlanıyor.');
+            }
+            cart = [];
+            localStorage.removeItem('cart');
+            displayCartItems();
+        });
+
+        displayCartItems();
+    </script>
 </body>
 </html>

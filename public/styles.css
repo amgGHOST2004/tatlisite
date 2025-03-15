@@ -234,3 +234,57 @@ button:hover {
 .section.active {
     display: block; /* Aktif section'ı göster */
 }
+
+/* Sepet Sayfası Stilleri */
+.cart-item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.cart-item img {
+    border-radius: 5px;
+}
+
+.cart-item button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.cart-item button:hover {
+    background-color: #cc0000;
+}
+
+#paymentOptions {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+#paymentOptions label {
+    display: block;
+    margin: 10px 0;
+}
+
+#paymentOptions button {
+    margin-top: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#paymentOptions button:hover {
+    background-color: #0056b3;
+}
