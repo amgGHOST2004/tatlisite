@@ -6,6 +6,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
+const router = express.Router();
 
 // Initialize the Express app
 const app = express();
@@ -49,6 +50,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const userRoutes = require('./src/routes/userRoutes');
 const productRoutes = require('./src/routes/product');
 const adminRoutes = require('./src/routes/admin');
+const adminRoutes = require('../../../../src/routes/admin');
 
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
