@@ -22,8 +22,60 @@
     </div>
     <div class="container">
         <h2>Addresses</h2>
-        <p>You have no saved addresses.</p>
+        <form id="addAddressForm">
+            <input type="text" id="addressName" placeholder="Address Name (e.g., Home, Work)" required>
+            <input type="text" id="addressLine1" placeholder="Address Line 1" required>
+            <input type="text" id="addressLine2" placeholder="Address Line 2">
+            <input type="text" id="city" placeholder="City" required>
+            <input type="text" id="state" placeholder="State" required>
+            <input type="text" id="postalCode" placeholder="Postal Code" required>
+            <input type="text" id="country" placeholder="Country" required>
+            <button type="submit">Add Address</button>
+        </form>
+        <div id="savedAddresses">
+            <h3>Saved Addresses</h3>
+            <ul id="addressList"></ul>
+        </div>
         <a href="index.html" class="button">Go to Home</a>
     </div>
+    <script>
+        let addresses = JSON.parse(localStorage.getItem('addresses')) || [];
+
+        function displayAddresses() {
+            const addressList = document.getElementById('addressList');
+            addressList.innerHTML = addresses.map((address, index) => `
+                <li>
+                    <strong>${address.name}</strong><br>
+                    ${address.line1}, ${address.line2 ? address.line2 + ', ' : ''}
+                    ${address.city}, ${address.state}, ${address.postalCode}, ${address.country}
+                    <button onclick="selectAddress(${index})">Select</button>
+                </li>
+            `).join('');
+        }
+
+        function selectAddress(index) {
+            localStorage.setItem('selectedAddress', JSON.stringify(addresses[index]));
+            alert('Address selected: ' + addresses[index].name);
+        }
+
+        document.getElementById('addAddressForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const address = {
+                name: document.getElementById('addressName').value,
+                line1: document.getElementById('addressLine1').value,
+                line2: document.getElementById('addressLine2').value,
+                city: document.getElementById('city').value,
+                state: document.getElementById('state').value,
+                postalCode: document.getElementById('postalCode').value,
+                country: document.getElementById('country').value
+            };
+            addresses.push(address);
+            localStorage.setItem('addresses', JSON.stringify(addresses));
+            displayAddresses();
+            this.reset();
+        });
+
+        displayAddresses();
+    </script>
 </body>
 </html>

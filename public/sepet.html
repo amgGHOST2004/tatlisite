@@ -39,6 +39,7 @@
     <script>
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         const cartItems = document.getElementById('cartItems');
+        const selectedAddress = JSON.parse(localStorage.getItem('selectedAddress'));
 
         function displayCartItems() {
             if (cart.length === 0) {
@@ -56,6 +57,17 @@
                     <button onclick="removeFromCart('${item.id}')">Kaldır</button>
                 </div>
             `).join('');
+
+            if (selectedAddress) {
+                cartItems.innerHTML += `
+                    <div class="selected-address">
+                        <h3>Selected Address</h3>
+                        <p>${selectedAddress.name}</p>
+                        <p>${selectedAddress.line1}, ${selectedAddress.line2 ? selectedAddress.line2 + ', ' : ''}
+                        ${selectedAddress.city}, ${selectedAddress.state}, ${selectedAddress.postalCode}, ${selectedAddress.country}</p>
+                    </div>
+                `;
+            }
         }
 
         function removeFromCart(productId) {
@@ -64,17 +76,43 @@
             displayCartItems();
         }
 
-        document.getElementById('paymentForm').addEventListener('submit', function(event) {
+        document.getElementById('paymentForm').addEventListener('submit', async function(event) {
             event.preventDefault();
-            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-            if (paymentMethod === 'online') {
-                alert('Online ödeme işlemi tamamlandı!');
-            } else {
-                alert('Kapıda ödeme seçildi. Siparişiniz hazırlanıyor.');
+            if (!selectedAddress) {
+                alert('Lütfen bir adres seçin.');
+                return;
             }
-            cart = [];
-            localStorage.removeItem('cart');
-            displayCartItems();
+
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+            try {
+                const response = await fetch('/api/checkout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        cart,
+                        paymentMethod,
+                        address: selectedAddress
+                    }),
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    alert('Sipariş başarıyla oluşturuldu!');
+                    cart = [];
+                    localStorage.removeItem('cart');
+                    localStorage.removeItem('selectedAddress');
+                    displayCartItems();
+                } else {
+                    const errorData = await response.json();
+                    alert(`Sipariş oluşturulamadı: ${errorData.message}`);
+                }
+            } catch (error) {
+                console.error('Error creating order:', error);
+                alert('Sipariş oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.');
+            }
         });
 
         displayCartItems();
