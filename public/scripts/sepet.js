@@ -50,6 +50,7 @@ document.getElementById('orderForm').addEventListener('submit', async (event) =>
                 totalAmount
             })
         });
+
         const result = await response.json();
         if (response.ok) {
             alert('Sipariş başarıyla gönderildi!');

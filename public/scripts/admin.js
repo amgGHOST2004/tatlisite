@@ -1,6 +1,10 @@
 async function fetchOrders() {
     try {
         const response = await fetch('/api/orders'); // Fetch orders from the backend
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const orders = await response.json();
         const ordersDiv = document.getElementById('orders');
         ordersDiv.innerHTML = ''; // Clear previous content
@@ -29,7 +33,7 @@ async function fetchOrders() {
             ordersDiv.appendChild(orderDiv);
         });
     } catch (error) {
-        console.error('Siparişler getirilirken bir hata oluştu:', error);
+        console.error('Error fetching orders:', error);
         const ordersDiv = document.getElementById('orders');
         ordersDiv.innerHTML = '<p>Siparişler getirilirken bir hata oluştu. Lütfen tekrar deneyin.</p>';
     }
