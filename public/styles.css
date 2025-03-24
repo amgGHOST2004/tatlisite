@@ -311,3 +311,38 @@ button:hover {
     list-style-type: disc;
     margin-left: 20px;
 }
+
+.order-card {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.order-card h3 {
+    margin: 0;
+    color: #333;
+}
+
+.order-card p {
+    margin: 5px 0;
+}
+
+.order-card ul {
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+.delete-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b;
+}
