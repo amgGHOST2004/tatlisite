@@ -60,4 +60,19 @@ router.post('/', auth, async (req, res) => {
   }
 });
 
+// Delete an order by ID
+router.delete('/orders/:id', async (req, res) => {
+    try {
+        const orderId = req.params.id;
+        const deletedOrder = await Order.findByIdAndDelete(orderId);
+        if (!deletedOrder) {
+            return res.status(404).json({ message: 'Sipariş bulunamadı.' });
+        }
+        res.json({ message: 'Sipariş başarıyla silindi.' });
+    } catch (error) {
+        console.error('Sipariş silinirken hata oluştu:', error);
+        res.status(500).json({ message: 'Sipariş silinirken bir hata oluştu.', error: error.message });
+    }
+});
+
 module.exports = router;

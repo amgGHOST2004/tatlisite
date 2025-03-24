@@ -49,11 +49,13 @@ const userRoutes = require('./src/routes/userRoutes');
 const productRoutes = require('./src/routes/product');
 const adminRoutes = require('./src/routes/admin');
 const orderRoutes = require('./src/routes/order');
+const paymentRoutes = require('./src/routes/payment');
 
 app.use('/api/users', userRoutes);
 app.use('/api', productRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api', orderRoutes);
+app.use('/api', paymentRoutes);
 
 // Default route for SPA
 app.get('*', (req, res) => {

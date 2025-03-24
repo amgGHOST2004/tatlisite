@@ -1,22 +1,19 @@
+// Fetch and display orders
 async function fetchOrders() {
     try {
-        const response = await fetch('/api/orders'); // Fetch orders from the backend
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
+        const response = await fetch('/api/orders');
         const orders = await response.json();
-        const ordersDiv = document.getElementById('orders');
-        ordersDiv.innerHTML = ''; // Clear previous content
+        const orderList = document.getElementById('orderList');
+        orderList.innerHTML = ''; // Clear previous content
 
         if (orders.length === 0) {
-            ordersDiv.innerHTML = '<p>Henüz sipariş yok.</p>';
+            orderList.innerHTML = '<p>Henüz sipariş yok.</p>';
             return;
         }
 
         orders.forEach(order => {
             const orderDiv = document.createElement('div');
-            orderDiv.classList.add('order');
+            orderDiv.className = 'order-card';
             orderDiv.innerHTML = `
                 <h3>${order.customerName}</h3>
                 <p><strong>Adres:</strong> ${order.address}</p>
@@ -28,15 +25,53 @@ async function fetchOrders() {
                         <li>${item.productId.name} - ${item.quantity} adet</li>
                     `).join('')}
                 </ul>
+                <button onclick="deleteOrder('${order._id}')" class="delete-btn">Sil</button>
                 <hr>
             `;
-            ordersDiv.appendChild(orderDiv);
+            orderList.appendChild(orderDiv);
         });
     } catch (error) {
-        console.error('Error fetching orders:', error);
-        const ordersDiv = document.getElementById('orders');
-        ordersDiv.innerHTML = '<p>Siparişler getirilirken bir hata oluştu. Lütfen tekrar deneyin.</p>';
+        console.error('Siparişler alınırken hata oluştu:', error);
+        const orderList = document.getElementById('orderList');
+        orderList.innerHTML = '<p>Siparişler getirilirken bir hata oluştu. Lütfen tekrar deneyin.</p>';
     }
 }
 
-fetchOrders();
+// Delete an order
+async function deleteOrder(orderId) {
+    if (!confirm('Bu siparişi silmek istediğinizden emin misiniz?')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/orders/${orderId}`, {
+            method: 'DELETE',
+        });
+        if (response.ok) {
+            alert('Sipariş başarıyla silindi!');
+            fetchOrders(); // Refresh the order list
+        } else {
+            alert('Sipariş silinirken hata oluştu.');
+        }
+    } catch (error) {
+        console.error('Sipariş silme hatası:', error);
+        alert('Sipariş silinirken bir hata oluştu.');
+    }
+}
+
+// Fetch orders when the "Siparişler" section is shown
+function showSection(section) {
+    const sectionElement = document.getElementById(section);
+    if (!sectionElement) {
+        console.error(`Section ${section} not found!`);
+        return;
+    }
+    document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+    sectionElement.classList.add('active');
+
+    if (section === 'products') fetchProducts();
+    if (section === 'orders') fetchOrders(); // Fetch orders when "Siparişler" is shown
+}
+
+// Show the dashboard section by default when the page loads
+showSection('dashboard');
