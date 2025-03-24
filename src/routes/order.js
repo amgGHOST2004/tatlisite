@@ -23,8 +23,8 @@ router.get('/orders', async (req, res) => {
         const orders = await Order.find().populate('items.productId'); // Populate product details
         res.json(orders); // Return orders as JSON
     } catch (error) {
-        console.error('Error fetching orders:', error);
-        res.status(500).json({ message: 'Error fetching orders.', error: error.message });
+        console.error('Siparişler getirilirken bir hata oluştu:', error);
+        res.status(500).json({ message: 'Siparişler getirilirken bir hata oluştu.', error: error.message });
     }
 });
 

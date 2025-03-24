@@ -6,7 +6,7 @@ const orderSchema = new mongoose.Schema({
     paymentMethod: { type: String, enum: ['Paid', 'Door Pay'], required: true },
     items: [
         {
-            productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+            productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true }, // Reference to Product model
             quantity: { type: Number, required: true },
         },
     ],
