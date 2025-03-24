@@ -48,10 +48,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 const userRoutes = require('./src/routes/userRoutes');
 const productRoutes = require('./src/routes/product');
 const adminRoutes = require('./src/routes/admin');
+const orderRoutes = require('./src/routes/order');
 
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api', orderRoutes);
 
 // Default route for SPA
 app.get('*', (req, res) => {

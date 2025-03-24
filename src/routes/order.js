@@ -1,8 +1,32 @@
 const express = require('express');
 const router = express.Router();
-const Order = require('../models/order');
-const Product = require('../models/product');
+const Order = require('../models/Order'); // Ensure the Order model exists
+const Product = require('../models/Product');
 const auth = require('../middleware/auth');
+
+// Create a new order
+router.post('/orders', async (req, res) => {
+    const { customerName, address, paymentMethod, items, totalAmount } = req.body;
+    try {
+        const newOrder = new Order({ customerName, address, paymentMethod, items, totalAmount });
+        await newOrder.save();
+        res.status(201).json({ message: 'Sipariş başarıyla oluşturuldu!' });
+    } catch (error) {
+        console.error('Sipariş oluşturulurken bir hata oluştu:', error);
+        res.status(500).json({ message: 'Sipariş oluşturulurken bir hata oluştu.', error: error.message });
+    }
+});
+
+// Get all orders (Admin Dashboard)
+router.get('/orders', async (req, res) => {
+    try {
+        const orders = await Order.find().populate('items.productId'); // Populate product details
+        res.json(orders);
+    } catch (error) {
+        console.error('Siparişler getirilirken bir hata oluştu:', error);
+        res.status(500).json({ message: 'Siparişler getirilirken bir hata oluştu.', error: error.message });
+    }
+});
 
 router.post('/', auth, async (req, res) => {
   try {

@@ -10,40 +10,16 @@
     <div class="container">
         <h2>Kayıt Ol</h2>
         <form id="registerForm">
-            <input type="text" id="username" name="username" placeholder="Kullanıcı Adı" required>
-            <input type="email" id="email" name="email" placeholder="E-posta" required>
-            <input type="password" id="password" name="password" placeholder="Şifre" required>
+            <label for="username">Kullanıcı Adı:</label>
+            <input type="text" id="username" name="username" required><br>
+            <label for="email">E-posta:</label>
+            <input type="email" id="email" name="email" required><br>
+            <label for="password">Şifre:</label>
+            <input type="password" id="password" name="password" required>
             <button type="submit">Kayıt Ol</button>
-            <p id="errorMessage" class="error-message"></p>
+            <p id="errorMessage" class="warning" style="display: none;"></p>
         </form>
-        <p>Zaten hesabınız var mı? <a href="login.html">Giriş yapın</a>.</p>
     </div>
-    <script>
-        document.getElementById('registerForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const username = document.getElementById('username').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const errorMessage = document.getElementById('errorMessage');
-            try {
-                const response = await fetch('/api/users/register', { // Updated endpoint
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, email, password })
-                });
-                const result = await response.json();
-                if (!response.ok) {
-                    errorMessage.innerHTML = result.message;
-                    errorMessage.style.display = 'block';
-                } else {
-                    alert('Kayıt başarılı! Şimdi giriş yapabilirsiniz.');
-                    window.location.href = 'login.html';
-                }
-            } catch (error) {
-                errorMessage.innerHTML = 'Bir hata oluştu. Lütfen tekrar deneyin.';
-                errorMessage.style.display = 'block';
-            }
-        });
-    </script>
+    <script src="scripts/register.js"></script> <!-- External script -->
 </body>
 </html>
